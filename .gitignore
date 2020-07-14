@@ -1,0 +1,10 @@
+node_modules
+local.ts
+local.sh
+local.html
+.idea
+*.env
+yarn-error.log
+dist
+.DS_Store
+coverage
