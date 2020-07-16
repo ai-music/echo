@@ -1,8 +1,24 @@
 import { Collection, MongoClient } from 'mongodb'
 
-export type TMongoTypes = 'double' | 'string' | 'object' | 'array' | 'binData' | 'objectId' | 'bool' | 'date' | 'null'
-    | 'regex' | 'javascript' | 'javascriptWithScope' | 'int' | 'timestamp' | 'long' | 'decimal' | 'minKey' | 'maxKey'
-
+export type TMongoTypes =
+    | 'double'
+    | 'string'
+    | 'object'
+    | 'array'
+    | 'binData'
+    | 'objectId'
+    | 'bool'
+    | 'date'
+    | 'null'
+    | 'regex'
+    | 'javascript'
+    | 'javascriptWithScope'
+    | 'int'
+    | 'timestamp'
+    | 'long'
+    | 'decimal'
+    | 'minKey'
+    | 'maxKey'
 
 export interface IFieldConfig {
     type: TMongoTypes
@@ -42,12 +58,14 @@ export interface ICollection {
     schema?: IMongoSchema
 
     createCollection<T>(): Promise<Collection<T>>
+
+    updateSchema<T>(): Promise<Collection<T>>
 }
 
 export interface ICollectionBuilder {
-    _schema?: IMongoSchema
+    schema?: IMongoSchema
 
-    new(client: MongoClient, collectionName: string, schema: IMongoSchema): ICollection
+    new (client: MongoClient, collectionName: string, schema: IMongoSchema): ICollection
 }
 
-export type CollectionConstructor<T = {}> = new (...args: any[]) => T;
+export type CollectionConstructor<T = {}> = new (...args: any[]) => T

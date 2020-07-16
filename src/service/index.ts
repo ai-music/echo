@@ -7,11 +7,14 @@ export class MongoDBService {
     protected collectionsBuilder: Map<string, ICollectionBuilder> = new Map()
     protected collections: Record<string, ICollection> = {}
 
-    protected constructor(protected connectionString: string, protected appName: string) {
-    }
+    protected constructor(protected connectionString: string, protected appName: string) {}
 
     public static factory(connectionString: string, appName: string): MongoDBService {
         return new this(connectionString, appName)
+    }
+
+    public static factoryFromBase64(connectionString64: string, appName: string): MongoDBService {
+        return new this(Buffer.from(connectionString64, 'base64').toString(), appName)
     }
 
     public async connect(): Promise<MongoDBService> {
@@ -31,9 +34,10 @@ export class MongoDBService {
 
     protected async configureCollections(): Promise<void> {
         for (const collectionBuilder of this.collectionsBuilder) {
-            const [ collectionName, collectionClass ] = collectionBuilder
-            const collection = new collectionClass(this.client, collectionName.toLowerCase(), collectionClass._schema)
-            collection.createCollection().then(e => console.log(e))
+            const [collectionName, collectionClass] = collectionBuilder
+            const collection = new collectionClass(this.client, collectionName.toLowerCase(), collectionClass.schema)
+            await collection.createCollection()
+            await collection.updateSchema()
             this.collections[collectionName] = collection
         }
     }
@@ -53,4 +57,10 @@ export class MongoDBService {
         this.collectionsBuilder.set(collection.name, collection)
     }
 
+    public getCollection<T extends ICollection>(collectionName: string): T {
+        if (this.collections[collectionName]) {
+            return this.collections[collectionName] as T
+        }
+        throw new TypeError(`No collection found with name ${collectionName}`)
+    }
 }
