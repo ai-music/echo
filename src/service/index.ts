@@ -32,6 +32,17 @@ export class MongoDBService {
         return this.client
     }
 
+    public registerCollection(collection: ICollectionBuilder): void {
+        this.collectionsBuilder.set(collection.name, collection)
+    }
+
+    public getCollection<T extends ICollection>(collectionName: string): T {
+        if (this.collections[collectionName]) {
+            return this.collections[collectionName] as T
+        }
+        throw new TypeError(`No collection found with name ${collectionName}`)
+    }
+
     protected async configureCollections(): Promise<void> {
         for (const collectionBuilder of this.collectionsBuilder) {
             const [collectionName, collectionClass] = collectionBuilder
@@ -51,16 +62,5 @@ export class MongoDBService {
         this.client = await MongoClient.connect(this.connectionString, options).catch((error) => {
             throw new Error(`MongoDB connection error: - ${JSON.stringify(error)} -`)
         })
-    }
-
-    public registerCollection(collection: ICollectionBuilder): void {
-        this.collectionsBuilder.set(collection.name, collection)
-    }
-
-    public getCollection<T extends ICollection>(collectionName: string): T {
-        if (this.collections[collectionName]) {
-            return this.collections[collectionName] as T
-        }
-        throw new TypeError(`No collection found with name ${collectionName}`)
     }
 }
