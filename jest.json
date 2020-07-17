@@ -1,0 +1,11 @@
+{
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "globals": {
+        "__DEV__": true
+    },
+    "modulePathIgnorePatterns": ["<rootDir>/dist/"],
+    "collectCoverage": true,
+    "coverageReporters": ["json", "html"],
+    "collectCoverageFrom": ["**/*.{ts,tsx}", "!**/node_modules/**", "!**/dist/**", "!**/*.spec.ts"]
+}
