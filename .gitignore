@@ -8,4 +8,4 @@ yarn-error.log
 dist
 .DS_Store
 coverage
-test.ts
+local.ts

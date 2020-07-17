@@ -26,5 +26,6 @@ module.exports = {
         '@typescript-eslint/explicit-function-return-type': ['error'],
         '@typescript-eslint/quotes': ['error', 'single', { allowTemplateLiterals: true }],
         '@typescript-eslint/no-explicit-any': ['off']
-    }
+    },
+    ignorePatterns: ['*.spec.ts']
 }

@@ -2,7 +2,7 @@ import { Collection, MongoClient } from 'mongodb'
 import { ICollection, IMongoSchema } from '../types'
 
 export abstract class AbstractCollection implements ICollection {
-    constructor(protected client: MongoClient, protected collectionName: string, public schema: IMongoSchema) {}
+    constructor(protected client: MongoClient, public collectionName: string, public schema: IMongoSchema) {}
 
     public createCollection<T>(): Promise<Collection<T>> {
         return this.client.db().createCollection(this.collectionName, { validator: this.schema })
