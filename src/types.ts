@@ -1,4 +1,4 @@
-import { Collection, MongoClient } from 'mongodb'
+import { Collection, FilterQuery, MongoClient } from 'mongodb'
 
 export type TMongoTypes =
     | 'double'
@@ -66,9 +66,9 @@ export interface ICollection<T> {
 
     createDocument(document: T): Promise<T>
 
-    findOne(filter: object): Promise<T>
+    findDocument(filter: FilterQuery<T>): Promise<T>
 
-    find(filter?: object): Promise<T[]>
+    findDocuments(filter?: FilterQuery<T>): Promise<T[]>
 }
 
 export interface ICollectionConfig {

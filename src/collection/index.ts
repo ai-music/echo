@@ -1,4 +1,4 @@
-import { Collection, MongoClient } from 'mongodb'
+import { Collection, FilterQuery, MongoClient } from 'mongodb'
 import { ICollection, ICollectionConfig, ICrudGateway, IIndex, IMongoSchema } from '../types'
 
 export abstract class AbstractCollection<T> implements ICollection<T> {
@@ -37,7 +37,7 @@ export abstract class AbstractCollection<T> implements ICollection<T> {
         return this.crudGateway.create.after(response.ops[0])
     }
 
-    public async findOne(filter: object): Promise<T | null> {
+    public async findDocument(filter: FilterQuery<T>): Promise<T | null> {
         const result = await this.getCollection().findOne(this.crudGateway.read.before(filter))
         if (!result) {
             return null
@@ -45,7 +45,7 @@ export abstract class AbstractCollection<T> implements ICollection<T> {
         return this.crudGateway.read.after(result)
     }
 
-    public async find(filter?: object): Promise<T[]> {
+    public async findDocuments(filter?: FilterQuery<T>): Promise<T[]> {
         const result = await this.getCollection().find(this.crudGateway.list.before(filter)).toArray()
         return this.crudGateway.list.after(result)
     }

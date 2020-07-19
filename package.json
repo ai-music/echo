@@ -1,6 +1,6 @@
 {
     "name": "@ai-music/echo",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "MongoDB configuration tool",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -8,6 +8,11 @@
     "author": "devs@aimusic.co.uk",
     "license": "MIT",
     "private": false,
+    "keywords": [
+        "mongodb",
+        "nodejs",
+        "typescript"
+    ],
     "files": [
         "dist"
     ],

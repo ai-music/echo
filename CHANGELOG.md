@@ -1,3 +1,9 @@
+## [2.0.1](https://github.com/ai-music/echo/compare/v2.0.0...v2.0.1) (2020-07-19)
+
+### Bug Fixes
+
+-   **emptydata:** fix exception in case of empy fields/indexes ([f93eaff](https://github.com/ai-music/echo/commit/f93eaff23c78cc7adff510f253b45bb528faa093))
+
 # [2.0.0](https://github.com/ai-music/echo/compare/v1.1.0...v2.0.0) (2020-07-19)
 
 ### Features
