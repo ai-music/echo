@@ -7,14 +7,14 @@ export class MongoDBService {
     protected collectionsBuilder: Map<string, ICollectionBuilder> = new Map()
     protected collections: Record<string, ICollection<unknown>> = {}
 
-    protected constructor(protected connectionString: string, protected appName: string) {}
+    protected constructor(public connectionString: string, protected appName: string) {}
 
     public static factory(connectionString: string, appName: string): MongoDBService {
         return new this(connectionString, appName)
     }
 
     public static factoryFromBase64(connectionString64: string, appName: string): MongoDBService {
-        return new this(Buffer.from(connectionString64, 'base64').toString(), appName)
+        return new this(Buffer.from(connectionString64, 'base64').toString('ascii'), appName)
     }
 
     public async connect(): Promise<MongoDBService> {
@@ -40,7 +40,7 @@ export class MongoDBService {
                 client: this.client,
                 collectionName: collectionName.toLowerCase(),
                 schema: CollectionClass.schema,
-                indexes: CollectionClass.indexes,
+                indexes: CollectionClass.indexes || [],
                 crudGateway: CollectionClass.crudGateway
             }
             const collection = new CollectionClass(config)
@@ -67,6 +67,7 @@ export class MongoDBService {
     }
 
     public getCollection<T extends ICollection<any>>(collectionName: string): T {
+        this.getClient()
         if (this.collections[collectionName]) {
             return this.collections[collectionName] as T
         }

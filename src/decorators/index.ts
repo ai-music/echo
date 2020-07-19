@@ -79,10 +79,11 @@ export function buildMongoSchema(collectionConfig: IMongoStorageConfig): IMongoS
             properties: {}
         }
     }
-    collectionConfig.fields.forEach((field) => {
-        basicSchema.$jsonSchema.properties[field.label] = {
-            bsonType: field.config.type
-        }
-    })
+    Array.isArray(collectionConfig.fields) &&
+        collectionConfig.fields.forEach((field) => {
+            basicSchema.$jsonSchema.properties[field.label] = {
+                bsonType: field.config.type
+            }
+        })
     return basicSchema
 }
