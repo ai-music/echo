@@ -1,26 +1,44 @@
 import { AbstractCollection } from './index'
 import { MongoClient } from 'mongodb'
+import { ICollectionConfig, IIndex, IMongoSchema } from '../types'
+import { defaultCrudGateway } from './crud_gateway'
 
 describe('AbstractCollection', () => {
-    const TestClass = class extends AbstractCollection {}
-    const schema = { $jsonSchema: { properties: {} } }
+    const TestClass = class extends AbstractCollection<any> {}
     const collectionName = 'my-collection'
-    let testInstance: AbstractCollection
+    const schema: IMongoSchema = { $jsonSchema: { properties: {} } }
+    const indexes: IIndex[] = []
+    let testInstance: AbstractCollection<any>
 
     beforeAll(() => {
         const client = new MongoClient('test')
-        testInstance = new TestClass(client, collectionName, schema)
+        const config: ICollectionConfig = {
+            client,
+            collectionName: collectionName.toLowerCase(),
+            schema: schema,
+            indexes: indexes,
+            crudGateway: defaultCrudGateway
+        }
+        testInstance = new TestClass(config)
     })
 
-    test('Should be extendable class', () => {
+    it('Should be extendable class', () => {
         expect(testInstance instanceof AbstractCollection).toBe(true)
     })
 
-    test(`Should have collection name`, () => {
+    it(`Should have collection name`, () => {
         expect(testInstance.collectionName).toBe(collectionName)
     })
 
-    test(`Should have schema`, () => {
+    it(`Should have schema`, () => {
         expect(testInstance.schema).toBe(schema)
+    })
+
+    it(`Should have indexes`, () => {
+        expect(Array.isArray(testInstance.indexes)).toBe(true)
+    })
+
+    it(`Should have gateway`, () => {
+        expect(testInstance.crudGateway).toBe(defaultCrudGateway)
     })
 })

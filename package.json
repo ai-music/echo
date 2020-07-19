@@ -14,7 +14,7 @@
     "scripts": {
         "build": "tsc",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-        "dev": "ts-node-dev --respawn --transpile-only ./src/test.ts",
+        "dev": "ts-node-dev --respawn --transpile-only ./src/local.ts",
         "test": "jest --config ./jest.json"
     },
     "devDependencies": {
@@ -32,7 +32,7 @@
         "pretty-quick": "^2.0.1",
         "ts-jest": "^26.1.2",
         "ts-node": "^8.10.2",
-        "ts-node-dev": "^1.0.0-pre.50",
+        "ts-node-dev": "^1.0.0-pre.52",
         "typescript": "^3.9.7"
     },
     "dependencies": {

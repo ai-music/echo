@@ -1,11 +1,11 @@
 import { MongoClient } from 'mongodb'
-import { ICollection, ICollectionBuilder } from '../types'
+import { ICollection, ICollectionBuilder, ICollectionConfig, IIndex } from '../types'
 
 export class MongoDBService {
     public serviceName = 'MongoDBService'
     protected client: MongoClient = null
     protected collectionsBuilder: Map<string, ICollectionBuilder> = new Map()
-    protected collections: Record<string, ICollection> = {}
+    protected collections: Record<string, ICollection<unknown>> = {}
 
     protected constructor(protected connectionString: string, protected appName: string) {}
 
@@ -23,6 +23,7 @@ export class MongoDBService {
         }
         await this.createConnection()
         await this.configureCollections()
+        return this
     }
 
     public getClient(): MongoClient {
@@ -34,10 +35,18 @@ export class MongoDBService {
 
     protected async configureCollections(): Promise<void> {
         for (const collectionBuilder of this.collectionsBuilder) {
-            const [collectionName, collectionClass] = collectionBuilder
-            const collection = new collectionClass(this.client, collectionName.toLowerCase(), collectionClass.schema)
+            const [collectionName, CollectionClass] = collectionBuilder
+            const config: ICollectionConfig = {
+                client: this.client,
+                collectionName: collectionName.toLowerCase(),
+                schema: CollectionClass.schema,
+                indexes: CollectionClass.indexes,
+                crudGateway: CollectionClass.crudGateway
+            }
+            const collection = new CollectionClass(config)
             await collection.createCollection()
             await collection.updateSchema()
+            await Promise.all(collection.indexes.map((index: IIndex) => collection.createIndex(index.config)))
             this.collections[collectionName] = collection
         }
     }
@@ -57,7 +66,7 @@ export class MongoDBService {
         this.collectionsBuilder.set(collection.name, collection)
     }
 
-    public getCollection<T extends ICollection>(collectionName: string): T {
+    public getCollection<T extends ICollection<any>>(collectionName: string): T {
         if (this.collections[collectionName]) {
             return this.collections[collectionName] as T
         }
