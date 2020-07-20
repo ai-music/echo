@@ -1,5 +1,6 @@
 import { MongoClient } from 'mongodb'
 import { ICollection, ICollectionBuilder, ICollectionConfig, IIndex } from '../types'
+import { defaultCrudGateway } from '../collection/crud_gateway'
 
 export class MongoDBService {
     public serviceName = 'MongoDBService'
@@ -41,7 +42,7 @@ export class MongoDBService {
                 collectionName: collectionName.toLowerCase(),
                 schema: CollectionClass.schema,
                 indexes: CollectionClass.indexes || [],
-                crudGateway: CollectionClass.crudGateway
+                crudGateway: CollectionClass.crudGateway || defaultCrudGateway
             }
             const collection = new CollectionClass(config)
             await collection.createCollection()
