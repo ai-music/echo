@@ -1,3 +1,9 @@
+## [2.0.4](https://github.com/ai-music/echo/compare/v2.0.3...v2.0.4) (2020-07-20)
+
+### Bug Fixes
+
+-   **crudgateway:** fix default value ([780d218](https://github.com/ai-music/echo/commit/780d2187373dd3ef277677f97c2932ee766e0d90))
+
 ## [2.0.3](https://github.com/ai-music/echo/compare/v2.0.2...v2.0.3) (2020-07-20)
 
 ### Bug Fixes
