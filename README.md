@@ -6,15 +6,15 @@
 
 # Echo
 
-Echo is a tiny library that wraps MongoDB basic configuration tasks in an easy way with native support for Typescript.
+Echo is a tiny library that wraps MongoDB's basic configuration tasks and simplifies them; with native support for Typescript.
 
-**It is not ( and does not aim to become ) a complete ORM/ODM solution like [TypeORM](https://github.com/typeorm/typeorm) or [Mongoose](https://mongoosejs.com/).**
+**It is not (and does not aim to become) a complete ORM/ODM solution like [TypeORM](https://github.com/typeorm/typeorm) or [Mongoose](https://mongoosejs.com/).**
 
-It is perfect to be used in small projects or microservices that handle a limited number of collections or complex queries without the overhead of a big library.
+It is perfect for use in small projects or microservices that handle a limited number of collections or complex queries without the overhead of a big library.
 
-Echo allows you:
+Echo allows you to:
 
--   build [\$jsonSchema](https://docs.mongodb.com/manual/reference/operator/query/jsonSchema/) via decorators **( incomplete )**
+-   build a [\$jsonSchema](https://docs.mongodb.com/manual/reference/operator/query/jsonSchema/) via decorators **( incomplete )**
 -   build indexes via decorators **( incomplete )**
 -   handle a set of custom functions across the document lifecycle.
 -   centralize common queries in a single class.
@@ -76,7 +76,7 @@ service.registerCollection(Users)
 await service.connect()
 ```
 
-At this stage, you can start to use the Users collection class in order to find/create/update/delete documents.
+At this stage, you can start to use the your collection class in order to find/create/update/delete documents.
 
 ```typescript
 const usersCollection = service.getCollection<Users>(Users.name)
@@ -98,13 +98,13 @@ await usersCollection.findDocument({ email: 'mario@bros.com' })
 
 MongoDBService wraps the official MongoDB node driver.
 
-Is used for:
+It is used for:
 
--   Create a connection to the database
--   Register collections to the service
--   Crate all the collections registered to the service ( automatic )
--   Update the jsonSchema of each collection registered to the service ( automatic via decorators )
--   Create collections indexes ( automatic via decorators )
+-   Creating a connection to the database
+-   Registering collections to the service
+-   Creating all the collections registered to the service ( automatic )
+-   Updating the jsonSchema of each collection registered to the service ( automatic via decorators )
+-   Creating collections indexes ( automatic via decorators )
 
 The service should be placed in the entry point of your application and stored in a [service locator](https://en.wikipedia.org/wiki/Service_locator_pattern) ( if you use one ).
 
