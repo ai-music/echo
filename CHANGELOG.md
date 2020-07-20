@@ -1,3 +1,9 @@
+## [2.0.3](https://github.com/ai-music/echo/compare/v2.0.2...v2.0.3) (2020-07-20)
+
+### Bug Fixes
+
+-   **crudgateway:** fix problem with uuid crud gateway ([27bb7c8](https://github.com/ai-music/echo/commit/27bb7c8930b4210dca88aad31be52883ebb33c61))
+
 ## [2.0.2](https://github.com/ai-music/echo/compare/v2.0.1...v2.0.2) (2020-07-19)
 
 ### Performance Improvements
