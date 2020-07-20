@@ -1,4 +1,5 @@
 export * from './collection'
+export * from './collection/crud_gateway'
 export * from './decorators'
 export * from './service'
 export * from './types'

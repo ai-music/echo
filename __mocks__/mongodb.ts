@@ -2,10 +2,7 @@ const mongodb = jest.genMockFromModule('mongodb')
 
 export class MongoClient {
     public static connect(connectionString: string): Promise<MongoClient> {
-        if (connectionString === 'pleaseFail') {
-            return Promise.reject(false)
-        }
-        return Promise.resolve(new MongoClient())
+        return connectionString === 'pleaseFail' ? Promise.reject(false) : Promise.resolve(new MongoClient())
     }
 
     public db(): object {

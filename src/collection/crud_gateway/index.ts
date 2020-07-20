@@ -27,11 +27,11 @@ export const defaultCrudGateway: ICrudGateway = {
 export const uuidCrudGateway: ICrudGateway = {
     create: {
         before: <T>(document: T): T => ({ _id: v4(), ...document }),
-        after: <T>({ _id: id, ...rest }: any): T => ({ _id: v4(), ...rest })
+        after: <T>({ _id: id, ...rest }: any): T => ({ id, ...rest })
     },
     read: {
         before: (input: unknown): unknown => input,
-        after: <T>({ _id: id, ...rest }: any): T => ({ _id: v4(), ...rest })
+        after: <T>({ _id: id, ...rest }: any): T => ({ id, ...rest })
     },
     update: {
         before: <T>(document: T): T => document,
