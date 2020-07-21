@@ -54,7 +54,7 @@ export function Field(config?: IFieldConfig): any {
 }
 
 export function IndexUnique(order = 1) {
-    return function (target: ICollection<unknown>, propertyKey: string): void {
+    return function (target: ICollection<any>, propertyKey: string): void {
         const mongoIndex = [{ [propertyKey]: order }, { unique: true }]
         Storage.updateStorage(
             {

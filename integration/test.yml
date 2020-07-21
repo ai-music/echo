@@ -1,0 +1,43 @@
+version: '3.7'
+services:
+    tests:
+        container_name: echo-tests
+        image: aimusic-echo-tests:latest
+        hostname: tests
+        networks:
+            - aimusic-echo-tests
+        build:
+            context: ../
+            target: tests
+            dockerfile: ./integration/test.dockerfile
+        tty: true
+        depends_on:
+            - mongo
+
+    tests-dev:
+        container_name: echo-tests-dev
+        hostname: tests-dev
+        networks:
+            - aimusic-echo-tests
+        build:
+            context: ../
+            target: development
+            dockerfile: ./integration/test.dockerfile
+        volumes:
+            - ../:/service
+        tty: true
+        depends_on:
+            - mongo
+
+    mongo:
+        image: mongo
+        container_name: echo-mongodb-tests
+        hostname: mongo
+        command: --serviceExecutor adaptive
+        networks:
+            - aimusic-echo-tests
+        ports:
+            - 27017:27017
+
+networks:
+    aimusic-echo-tests:

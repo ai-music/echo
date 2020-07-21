@@ -20,7 +20,8 @@
         "build": "tsc",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
         "dev": "ts-node-dev --respawn --transpile-only ./src/local.ts",
-        "test": "jest --config ./jest.json"
+        "test": "jest --config ./jest_unit.json",
+        "integration": "jest --config ./jest_integration.json"
     },
     "devDependencies": {
         "@semantic-release/changelog": "^5.0.1",

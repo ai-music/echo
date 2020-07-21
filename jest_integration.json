@@ -1,0 +1,10 @@
+{
+    "collectCoverage": false,
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "globals": {
+        "__DEV__": true
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test))\\.[jt]sx?$",
+    "modulePathIgnorePatterns": ["<rootDir>/src/.*/__mocks__", "<rootDir>/__mocks__", "<rootDir>/dist"]
+}

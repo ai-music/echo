@@ -4,7 +4,7 @@
     "globals": {
         "__DEV__": true
     },
-    "modulePathIgnorePatterns": ["<rootDir>/dist/"],
+    "modulePathIgnorePatterns": ["<rootDir>/dist", "<rootDir>/integration"],
     "collectCoverage": true,
     "coverageReporters": ["json", "html"],
     "collectCoverageFrom": ["**/*.{ts,tsx}", "!**/node_modules/**", "!**/dist/**", "!**/*.spec.ts", "!./src/local.ts"]
