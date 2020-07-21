@@ -1,3 +1,9 @@
+## [2.1.1](https://github.com/ai-music/echo/compare/v2.1.0...v2.1.1) (2020-07-21)
+
+### Bug Fixes
+
+-   **collection:** filter type ([83d9814](https://github.com/ai-music/echo/commit/83d9814f2c5bbfa7924f245008c104e8937e339a))
+
 # [2.1.0](https://github.com/ai-music/echo/compare/v2.0.5...v2.1.0) (2020-07-21)
 
 ### Features
