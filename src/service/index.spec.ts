@@ -77,4 +77,11 @@ describe('Service', () => {
         const error = await service.connect().catch((e) => e.message)
         expect(error === 'MongoDB connection error: - false -').toBe(true)
     })
+
+    it(`Should be able to close the connection`, async () => {
+        const service = MongoDBService.factory('test/connection', 'appName')
+        await service.connect()
+        const disconnect = await service.disconnect()
+        expect(disconnect).toBe(undefined)
+    })
 })

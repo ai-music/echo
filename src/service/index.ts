@@ -27,6 +27,12 @@ export class MongoDBService {
         return this
     }
 
+    public async disconnect(): Promise<void> {
+        if (this.client) {
+            await this.client.close()
+        }
+    }
+
     public getClient(): MongoClient {
         if (!this.client) {
             throw Error('Connection is not created yet')

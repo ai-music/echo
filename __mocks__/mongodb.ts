@@ -5,6 +5,10 @@ export class MongoClient {
         return connectionString === 'pleaseFail' ? Promise.reject(false) : Promise.resolve(new MongoClient())
     }
 
+    public close(): Promise<void> {
+        return Promise.resolve()
+    }
+
     public db(): object {
         return {
             createCollection: (): Promise<boolean> => Promise.resolve(true),
