@@ -10,7 +10,21 @@ export class MongoClient {
             createCollection: (): Promise<boolean> => Promise.resolve(true),
             command: (): Promise<boolean> => Promise.resolve(true),
             collection: (): object => ({
-                createIndex: (): Promise<boolean> => Promise.resolve(true)
+                createIndex: (): Promise<boolean> => Promise.resolve(true),
+                insertOne: (document: any): Promise<any> => {
+                    if (document?.pleaseFail) {
+                        return Promise.reject('insertOne error')
+                    }
+                    if (document?.pleaseFailWeird) {
+                        return Promise.resolve(document)
+                    }
+                    return Promise.resolve({ ops: [document] })
+                },
+                findOne: (query: any): Promise<any> => (query.id ? Promise.resolve(query) : Promise.resolve(false)),
+                find: (query: any): object => ({
+                    toArray: (): Promise<any> =>
+                        query.isValid ? Promise.resolve([{ id: 'doc1' }, { id: 'doc2' }]) : Promise.resolve([])
+                })
             })
         }
     }

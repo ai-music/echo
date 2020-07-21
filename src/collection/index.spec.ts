@@ -9,6 +9,9 @@ describe('AbstractCollection', () => {
     const schema: IMongoSchema = { $jsonSchema: { properties: {} } }
     const indexes: IIndex[] = []
     let testInstance: AbstractCollection<any>
+    const document = {
+        attribute: 'test'
+    }
 
     beforeAll(() => {
         const client = new MongoClient('test')
@@ -40,5 +43,48 @@ describe('AbstractCollection', () => {
 
     it(`Should have gateway`, () => {
         expect(testInstance.crudGateway).toBe(defaultCrudGateway)
+    })
+
+    it(`Create document`, async () => {
+        const createDocument = await testInstance.createDocument(document)
+        expect(createDocument.attribute).toBe('test')
+    })
+
+    it(`Create document failure`, async () => {
+        const t = { ...document, pleaseFail: true }
+        const createDocument = await testInstance.createDocument(t).catch((e) => e)
+        expect(createDocument).toBe('insertOne error')
+    })
+
+    it(`Should return a a not valid response from mongo`, async () => {
+        const t = { ...document, pleaseFailWeird: true }
+        const createDocument = await testInstance.createDocument(t).catch((e) => e.message)
+        expect(createDocument).toBe('Create document error - response from MongoDB is not valid')
+    })
+
+    it(`Should find a valid document`, async () => {
+        const t = { id: 'valid' }
+        const createDocument = await testInstance.findDocument(t)
+        expect(createDocument).toBe(t)
+    })
+
+    it(`Should not find anything`, async () => {
+        const t = { test: 'invalid' }
+        const createDocument = await testInstance.findDocument(t)
+        expect(createDocument).toBe(null)
+    })
+
+    it(`Should Find a collection of documents`, async () => {
+        const t = { isValid: true }
+        const list = await testInstance.findDocuments(t)
+        expect(Array.isArray(list)).toBe(true)
+        expect(list.length).toBe(2)
+    })
+
+    it(`Should return an empty collection`, async () => {
+        const t = { isValid: false }
+        const list = await testInstance.findDocuments(t)
+        expect(Array.isArray(list)).toBe(true)
+        expect(list.length).toBe(0)
     })
 })
