@@ -1,3 +1,9 @@
+# [2.1.0](https://github.com/ai-music/echo/compare/v2.0.5...v2.1.0) (2020-07-21)
+
+### Features
+
+-   **bump:** force bump ([af89187](https://github.com/ai-music/echo/commit/af89187c31ea73c3866e2b45c9d85e6da5086086))
+
 ## [2.0.5](https://github.com/ai-music/echo/compare/v2.0.4...v2.0.5) (2020-07-21)
 
 ### Bug Fixes
