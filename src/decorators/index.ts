@@ -14,9 +14,9 @@ import { Storage } from '../storage'
 import 'reflect-metadata'
 import { defaultCrudGateway } from '../collection/crud_gateway'
 
-export function Collection<TBase extends CollectionConstructor & { schema?: object; indexes?: IIndex[] }>(
-    Base: TBase
-): TBase {
+export function Collection<
+    TBase extends CollectionConstructor & { schema?: object; indexes?: IIndex[]; crudGateway?: ICrudGateway }
+>(Base: TBase): TBase {
     const collectionName = Base.name.toLowerCase()
     const conf = Storage.getConfig().get(collectionName)
     if (!conf) {
@@ -24,10 +24,13 @@ export function Collection<TBase extends CollectionConstructor & { schema?: obje
     }
     Base.schema = buildMongoSchema(conf)
     Base.indexes = conf.indexes || []
+    if (!Base.crudGateway) {
+        Base.crudGateway = defaultCrudGateway
+    }
     return Base
 }
 
-export function CrudGateway(crudGateway: ICrudGateway) {
+export function CrudGateway(crudGateway?: ICrudGateway) {
     return function (target: ICollectionBuilder): any {
         target.crudGateway = crudGateway || defaultCrudGateway
     }
@@ -67,7 +70,7 @@ export function IndexUnique(order = 1) {
 export function resolveFieldType(target: ICollection<unknown>, propertyKey: string): TMongoTypes {
     const autoType = Reflect.getMetadata('design:type', target, propertyKey)
     if (!autoType) {
-        throw TypeError(`Invalid type provided for ${target} - ${propertyKey}`)
+        throw TypeError(`Invalid type provided for ${target.toString()} - ${propertyKey}`)
     }
     return autoType.name.toLowerCase()
 }
