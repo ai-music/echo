@@ -1,21 +1,24 @@
-import { Collection, Field } from '../../src/decorators'
+import { Collection, Field, IndexUnique, AbstractCollection } from '../../src'
 
-import { AbstractCollection } from '../../src/collection'
-
-interface ICar {
-    name: string
-    model: number
-    productionDate: Date
+interface IUser {
+    firstNae: string
+    lastName: string
+    email: string
+    createdAt: Date
 }
 
 @Collection
-export class Cars extends AbstractCollection<ICar> {
+export class Users extends AbstractCollection<IUser> {
     @Field()
-    protected name: string
+    protected firstNae: string
 
     @Field()
-    protected model: number
+    protected lastName: string
 
     @Field()
-    protected productionDate: Date
+    @IndexUnique()
+    protected email: string
+
+    @Field()
+    protected createdAt: Date
 }
