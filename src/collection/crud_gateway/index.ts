@@ -51,3 +51,31 @@ export const uuidCrudGateway: ICrudGateway = {
         }
     }
 }
+
+export const uuidUserCrudGateway: ICrudGateway = {
+    create: {
+        before: <T>(document: T): T => ({ _id: v4(), ...document }),
+        after: <T>({ _id: id, password, ...rest }: any): T => ({ id, ...rest })
+    },
+    read: {
+        before: (input: unknown): unknown => input,
+        after: <T>({ _id: id, password, ...rest }: any): T => ({ id, ...rest })
+    },
+    update: {
+        before: <T>(document: T): T => document,
+        after: <T>({ _id: id, password, ...rest }: any): T => ({ id, ...rest })
+    },
+    delete: {
+        before: <T>(document: T): T => document,
+        after: <T>(document: T): T => document
+    },
+    list: {
+        before: (input: unknown): unknown => input,
+        after: <T>(documents: unknown[]): T[] => {
+            return documents.map((document: any) => {
+                const { _id: id, password, ...rest } = document
+                return { ...rest, id }
+            })
+        }
+    }
+}
