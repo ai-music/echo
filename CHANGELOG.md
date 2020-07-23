@@ -1,3 +1,9 @@
+# [2.2.0](https://github.com/ai-music/echo/compare/v2.1.1...v2.2.0) (2020-07-22)
+
+### Features
+
+-   **CrudGateway:** Added new user crudgateway ([7e76c00](https://github.com/ai-music/echo/commit/7e76c00650c531f319d3185f044270927732ffd8))
+
 ## [2.1.1](https://github.com/ai-music/echo/compare/v2.1.0...v2.1.1) (2020-07-21)
 
 ### Bug Fixes

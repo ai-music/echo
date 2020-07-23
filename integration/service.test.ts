@@ -11,7 +11,7 @@ describe('Service', () => {
         service = MongoDBService.factory(connection, 'tests')
         service.registerCollection(Cars)
         service.registerCollection(Users)
-        // service.registerCollection(Dogs)
+        service.registerCollection(Dogs)
         await service.connect()
     }, 30_000)
 
@@ -39,6 +39,15 @@ describe('Service', () => {
             expect(typeof car.name).toBe('string')
             expect(typeof car.model).toBe('number')
             expect(car.productionDate).toBeInstanceOf(Date)
+        })
+
+        it(`Should delete all cars`, async () => {
+            const cars = service.getCollection<Cars>(Cars.name)
+            const allCars = await cars.findDocuments()
+            const ids = allCars.map((car) => car._id)
+            await cars.deleteDocuments({ _id: { $in: ids } })
+            const allCarsAfterDelete = await cars.findDocuments()
+            expect(allCarsAfterDelete).toHaveLength(0)
         })
     })
 
