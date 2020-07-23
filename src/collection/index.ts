@@ -50,6 +50,10 @@ export abstract class AbstractCollection<T> implements ICollection<T> {
         return this.crudGateway.list.after(result)
     }
 
+    public async deleteDocuments(filter?: FilterQuery<T>): Promise<void> {
+        await this.getCollection().deleteMany(this.crudGateway.delete.before(filter))
+    }
+
     protected getCollection(): Collection {
         return this.client.db().collection(this.collectionName)
     }

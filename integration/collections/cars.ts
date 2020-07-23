@@ -1,6 +1,7 @@
 import { Collection, Field, AbstractCollection } from '../../src'
 
 interface ICar {
+    _id: string
     name: string
     model: number
     productionDate: Date
