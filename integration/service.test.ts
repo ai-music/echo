@@ -41,6 +41,17 @@ describe('Service', () => {
             expect(car.productionDate).toBeInstanceOf(Date)
         })
 
+        it('Should update the car', async () => {
+            const cars = service.getCollection<Cars>(Cars.name)
+            const car = await cars.createDocument({
+                model: 123,
+                name: '500 FIAT',
+                productionDate: new Date()
+            })
+            const updatedCar = await cars.updateDocument({ _id: car._id }, { ...car, model: 234 })
+            expect(updatedCar.model).toBe(234)
+        })
+
         it(`Should delete all cars`, async () => {
             const cars = service.getCollection<Cars>(Cars.name)
             const allCars = await cars.findDocuments()
