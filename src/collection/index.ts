@@ -37,6 +37,18 @@ export abstract class AbstractCollection<T> implements ICollection<T> {
         return this.crudGateway.create.after(response.ops[0])
     }
 
+    public async updateDocument(filter: FilterQuery<T>, document: Partial<T>): Promise<T> {
+        const response = await this.getCollection().findOneAndUpdate(
+            filter,
+            { $set: this.crudGateway.update.before(document) },
+            { returnOriginal: false }
+        )
+        if (!response.value) {
+            throw new Error('Update document error - response from MongoDB is not valid')
+        }
+        return this.crudGateway.update.after(response.value)
+    }
+
     public async findDocument(filter: FilterQuery<T>): Promise<T | null> {
         const result = await this.getCollection().findOne(this.crudGateway.read.before(filter))
         if (!result) {

@@ -1,7 +1,7 @@
 import { Collection, Field, IndexUnique, AbstractCollection } from '../../src'
 
 interface IUser {
-    firstNae: string
+    firstName: string
     lastName: string
     email: string
     createdAt: Date
@@ -10,7 +10,7 @@ interface IUser {
 @Collection
 export class Users extends AbstractCollection<IUser> {
     @Field()
-    protected firstNae: string
+    protected firstName: string
 
     @Field()
     protected lastName: string
