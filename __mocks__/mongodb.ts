@@ -28,7 +28,18 @@ export class MongoClient {
                 find: (query: any): object => ({
                     toArray: (): Promise<any> =>
                         query.isValid ? Promise.resolve([{ id: 'doc1' }, { id: 'doc2' }]) : Promise.resolve([])
-                })
+                }),
+                findOneAndUpdate: (query: any, document: any): Promise<any> => {
+                    if (document.$set?.pleaseFail) {
+                        return Promise.reject('findOneAndUpdate error')
+                    }
+
+                    if (document.$set?.pleaseFailWeird) {
+                        return Promise.resolve(document)
+                    }
+                    return query._id ? Promise.resolve({ value: document.$set }) : Promise.resolve(false)
+                },
+                deleteMany: (query: any): Promise<any> => Promise.resolve(query)
             })
         }
     }
