@@ -10,6 +10,7 @@ describe('AbstractCollection', () => {
     const indexes: IIndex[] = []
     let testInstance: AbstractCollection<any>
     const document = {
+        id: '1234-1234-1234',
         attribute: 'test'
     }
 
@@ -62,6 +63,24 @@ describe('AbstractCollection', () => {
         expect(createDocument).toBe('Create document error - response from MongoDB is not valid')
     })
 
+    it(`Update document`, async () => {
+        const createDocument = await testInstance.createDocument(document)
+        const updateDocument = await testInstance.updateDocument({ _id: createDocument.id }, { attribute: 'updated' })
+        expect(updateDocument.attribute).toBe('updated')
+    })
+
+    it(`Update document failure`, async () => {
+        const t = { ...document, pleaseFail: true }
+        const updateDocument = await testInstance.updateDocument({ _id: t.id }, t).catch((e) => e)
+        expect(updateDocument).toBe('findOneAndUpdate error')
+    })
+
+    it(`Should return a a not valid response from mongo`, async () => {
+        const t = { ...document, pleaseFailWeird: true }
+        const updateDocument = await testInstance.updateDocument({ _id: t.id }, t).catch((e) => e.message)
+        expect(updateDocument).toBe('Update document error - response from MongoDB is not valid')
+    })
+
     it(`Should find a valid document`, async () => {
         const t = { id: 'valid' }
         const createDocument = await testInstance.findDocument(t)
@@ -86,5 +105,10 @@ describe('AbstractCollection', () => {
         const list = await testInstance.findDocuments(t)
         expect(Array.isArray(list)).toBe(true)
         expect(list.length).toBe(0)
+    })
+
+    it('Should delete many documents', async () => {
+        const deletedDocument = await testInstance.deleteDocuments({ _id: document.id })
+        expect(deletedDocument).toBe(undefined)
     })
 })
