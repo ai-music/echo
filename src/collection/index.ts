@@ -37,10 +37,11 @@ export abstract class AbstractCollection<T> implements ICollection<T> {
         return this.crudGateway.create.after(response.ops[0])
     }
 
-    public async updateDocument(filter: FilterQuery<T>, document: Partial<T>): Promise<T> {
+    public async updateDocument(filters: FilterQuery<T>, document: Partial<T>): Promise<T> {
+        const { filters: filterCrud, document: documentCrud } = this.crudGateway.update.before({ filters, document })
         const response = await this.getCollection().findOneAndUpdate(
-            filter,
-            { $set: this.crudGateway.update.before(document) },
+            filterCrud,
+            { $set: documentCrud },
             { returnOriginal: false }
         )
         if (!response.value) {
@@ -62,8 +63,14 @@ export abstract class AbstractCollection<T> implements ICollection<T> {
         return this.crudGateway.list.after(result)
     }
 
+    public async deleteDocument(filter?: FilterQuery<T>): Promise<void> {
+        const result = await this.getCollection().deleteOne(this.crudGateway.delete.before(filter))
+        this.crudGateway.delete.after(result)
+    }
+
     public async deleteDocuments(filter?: FilterQuery<T>): Promise<void> {
-        await this.getCollection().deleteMany(this.crudGateway.delete.before(filter))
+        const result = await this.getCollection().deleteMany(this.crudGateway.delete.before(filter))
+        this.crudGateway.delete.after(result)
     }
 
     protected getCollection(): Collection {
