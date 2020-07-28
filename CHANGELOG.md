@@ -1,3 +1,9 @@
+# [2.7.0](https://github.com/ai-music/echo/compare/v2.6.0...v2.7.0) (2020-07-28)
+
+### Features
+
+-   **crudgateway:** improve filters and interfaces for crud gateway ([49d4503](https://github.com/ai-music/echo/commit/49d4503d16c6eb3311e950d3a11350846f380fb4))
+
 # [2.5.0](https://github.com/ai-music/echo/compare/v2.4.0...v2.5.0) (2020-07-24)
 
 ### Features
