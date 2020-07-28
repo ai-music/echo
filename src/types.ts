@@ -93,21 +93,26 @@ export interface ICrudGateway {
         after<T>(document: T): T
     }
     read: {
-        before(input: unknown): unknown
+        before<T>(filters: FilterQuery<T>): T
         after<T>(document: T): T
     }
     update: {
-        before<T>(document: T): T
+        before<T>(input: ICrudGatewayUpdateInput<T>): ICrudGatewayUpdateInput<T>
         after<T>(document: T): T
     }
     delete: {
-        before<T>(document: T): T
+        before<T>(filters: FilterQuery<T>): T
         after<T>(document: T): T
     }
     list: {
         before(input: unknown): unknown
         after(documents: any[]): any[]
     }
+}
+
+export interface ICrudGatewayUpdateInput<T> {
+    filters: FilterQuery<T>
+    document?: T
 }
 
 export type CollectionConstructor<T = {}> = new (...args: any[]) => T

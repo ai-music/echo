@@ -1,17 +1,20 @@
-import { defaultCrudGateway, uuidCrudGateway, uuidUserCrudGateway } from './index'
+import { defaultCrudGateway, uuidCrudGateway } from './index'
 
 describe('CrudGateway', () => {
+    const test = { test: 'test' }
+    const tests = [{ test: 'test' }]
+    const updateInput = {
+        filters: {},
+        document: test
+    }
     it('Default gateway should never affect the input', () => {
-        const test = { test: 'test' }
-        const tests = [{ test: 'test' }]
-
         expect(test).toBe(defaultCrudGateway.create.before(test))
         expect(test).toBe(defaultCrudGateway.create.after(test))
 
         expect(test).toBe(defaultCrudGateway.read.before(test))
         expect(test).toBe(defaultCrudGateway.read.after(test))
 
-        expect(test).toBe(defaultCrudGateway.update.before(test))
+        expect(updateInput).toBe(defaultCrudGateway.update.before(updateInput))
         expect(test).toBe(defaultCrudGateway.update.after(test))
 
         expect(test).toBe(defaultCrudGateway.delete.before(test))
@@ -23,48 +26,26 @@ describe('CrudGateway', () => {
 
     it('UUID gateway', () => {
         const test = { test: 'test' }
-        const tests = [{ test: 'test' }]
-
+        const tests = [{ test: 'test', _id: 'test' }]
         const beforeCreate = uuidCrudGateway.create.before(test)
+
         expect(beforeCreate).toHaveProperty('_id')
         expect(uuidCrudGateway.create.after(beforeCreate)).toHaveProperty('id')
-
-        expect(uuidCrudGateway.read.before(test)).toBe(test)
-        expect(uuidCrudGateway.read.after(test)).toHaveProperty('id')
-
-        expect(uuidCrudGateway.update.before(test)).toBe(test)
-        expect(uuidCrudGateway.update.after(test)).toBe(test)
-
+        // Passing id should return _id
+        const testId = { ...test, id: 'test_my_id' }
+        expect(uuidCrudGateway.read.before(testId)).toHaveProperty('_id')
+        // Passing _id should return _id
+        expect(uuidCrudGateway.read.before(beforeCreate)).toHaveProperty('_id')
+        // Passing _id should return id
+        expect(uuidCrudGateway.read.after(beforeCreate)).toHaveProperty('id')
+        const updateTest = { filters: { id: 'testFilter' }, document: { id: 'testDocument' } }
+        const updateResult = uuidCrudGateway.update.before(updateTest)
+        expect(updateResult.document).toHaveProperty('_id')
+        expect(updateResult.filters).toHaveProperty('_id')
+        expect(uuidCrudGateway.update.after(updateResult.document)).toHaveProperty('id')
         expect(uuidCrudGateway.delete.before(test)).toBe(test)
         expect(uuidCrudGateway.delete.after(test)).toBe(test)
-
         expect(uuidCrudGateway.list.before(tests)).toBe(tests)
         expect(uuidCrudGateway.list.after(tests)[0]).toHaveProperty('id')
-    })
-
-    it('UUID User gateway', () => {
-        const test = { test: 'test', password: 'topolino' }
-        const tests = [{ test: 'test', password: 'topolino' }]
-
-        const beforeCreate = uuidUserCrudGateway.create.before(test)
-        expect(beforeCreate).toHaveProperty('_id')
-        expect(beforeCreate).toHaveProperty('password')
-        expect(uuidUserCrudGateway.create.after(beforeCreate)).toHaveProperty('id')
-        expect(uuidUserCrudGateway.create.after(beforeCreate)).not.toHaveProperty('password')
-
-        expect(uuidUserCrudGateway.read.before(test)).toBe(test)
-        expect(uuidUserCrudGateway.read.after(test)).toHaveProperty('id')
-        expect(uuidUserCrudGateway.read.after(test)).not.toHaveProperty('password')
-
-        expect(uuidUserCrudGateway.update.before(test)).toBe(test)
-        expect(uuidUserCrudGateway.update.after(test)).toHaveProperty('id')
-        expect(uuidUserCrudGateway.update.after(test)).not.toHaveProperty('password')
-
-        expect(uuidUserCrudGateway.delete.before(test)).toBe(test)
-        expect(uuidUserCrudGateway.delete.after(test)).toBe(test)
-
-        expect(uuidUserCrudGateway.list.before(tests)).toBe(tests)
-        expect(uuidUserCrudGateway.list.after(tests)[0]).toHaveProperty('id')
-        expect(uuidUserCrudGateway.list.after(tests)[0]).not.toHaveProperty('password')
     })
 })

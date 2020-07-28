@@ -101,6 +101,14 @@ describe('Service', () => {
             expect(fido).toHaveProperty('id')
         })
 
+        it(`Should update a dog (id)`, async () => {
+            const dogs = service.getCollection<Dogs>(Dogs.name)
+            const newDog = await dogs.createDocument(dog)
+            const pluto = await dogs.updateDocument({ id: newDog.id }, { ...newDog, name: 'pluto' })
+            expect(pluto).toHaveProperty('id')
+            expect(pluto.name).toBe('pluto')
+        })
+
         it(`Should find all the dogs (id)`, async () => {
             const dogs = service.getCollection<Dogs>(Dogs.name)
             const allDogs = await dogs.findDocuments()

@@ -1,5 +1,6 @@
-import { ICrudGateway } from '../../types'
+import { ICrudGateway, ICrudGatewayUpdateInput } from '../../types'
 import { v4 } from 'uuid'
+import { FilterQuery } from 'mongodb'
 
 export const defaultCrudGateway: ICrudGateway = {
     create: {
@@ -7,15 +8,15 @@ export const defaultCrudGateway: ICrudGateway = {
         after: <T>(document: T): T => document
     },
     read: {
-        before: (input: unknown): unknown => input,
+        before: <T>(input: FilterQuery<T>): any => input,
         after: <T>(document: T): T => document
     },
     update: {
-        before: <T>(document: T): T => document,
+        before: <T>(input: ICrudGatewayUpdateInput<T>): any => input,
         after: <T>(document: T): T => document
     },
     delete: {
-        before: <T>(document: T): T => document,
+        before: <T>(document: FilterQuery<T>): any => document,
         after: <T>(document: T): T => document
     },
     list: {
@@ -27,55 +28,41 @@ export const defaultCrudGateway: ICrudGateway = {
 export const uuidCrudGateway: ICrudGateway = {
     create: {
         before: <T>(document: T): T => ({ _id: v4(), ...document }),
-        after: <T>({ _id: id, ...rest }: any): T => ({ id, ...rest })
+        after: <T>(document: T): T => convert_Id(document)
     },
     read: {
-        before: (input: unknown): unknown => input,
-        after: <T>({ _id: id, ...rest }: any): T => ({ id, ...rest })
+        before: <T>(filter: FilterQuery<T>): any => convertId(filter),
+        after: <T>(document: T): T => convert_Id(document)
     },
     update: {
-        before: <T>(document: T): T => document,
-        after: <T>(document: T): T => document
+        before: <T>(input: ICrudGatewayUpdateInput<T>): any => ({
+            document: convertId(input.document),
+            filters: convertId(input.filters)
+        }),
+        after: <T>(document: T): T => convert_Id(document)
     },
     delete: {
-        before: <T>(document: T): T => document,
+        before: <T>(document: FilterQuery<T>): any => document,
         after: <T>(document: T): T => document
     },
     list: {
         before: (input: unknown): unknown => input,
-        after: <T>(documents: unknown[]): T[] => {
-            return documents.map((document: any) => {
-                const { _id: id, ...rest } = document
-                return { ...rest, id }
-            })
-        }
+        after: <T>(documents: unknown[]): T[] => documents.map((document: T) => convert_Id(document))
     }
 }
 
-export const uuidUserCrudGateway: ICrudGateway = {
-    create: {
-        before: <T>(document: T): T => ({ _id: v4(), ...document }),
-        after: <T>({ _id: id, password, ...rest }: any): T => ({ id, ...rest })
-    },
-    read: {
-        before: (input: unknown): unknown => input,
-        after: <T>({ _id: id, password, ...rest }: any): T => ({ id, ...rest })
-    },
-    update: {
-        before: <T>(document: T): T => document,
-        after: <T>({ _id: id, password, ...rest }: any): T => ({ id, ...rest })
-    },
-    delete: {
-        before: <T>(document: T): T => document,
-        after: <T>(document: T): T => document
-    },
-    list: {
-        before: (input: unknown): unknown => input,
-        after: <T>(documents: unknown[]): T[] => {
-            return documents.map((document: any) => {
-                const { _id: id, password, ...rest } = document
-                return { ...rest, id }
-            })
-        }
+export function convertId(input: any): any {
+    if (input.id) {
+        const { id: _id, ...rest } = input
+        return { ...rest, _id }
     }
+    return input
+}
+
+export function convert_Id(input: any): any {
+    if (input._id) {
+        const { _id: id, ...rest } = input
+        return { ...rest, id }
+    }
+    return input
 }
