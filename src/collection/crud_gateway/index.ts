@@ -52,7 +52,7 @@ export const uuidCrudGateway: ICrudGateway = {
 }
 
 export function convertId(input: any): any {
-    if (input.id) {
+    if (input?.id) {
         const { id: _id, ...rest } = input
         return { ...rest, _id }
     }
@@ -60,7 +60,7 @@ export function convertId(input: any): any {
 }
 
 export function convert_Id(input: any): any {
-    if (input._id) {
+    if (input?._id) {
         const { _id: id, ...rest } = input
         return { ...rest, id }
     }
