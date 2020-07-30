@@ -1,3 +1,9 @@
+## [2.7.1](https://github.com/ai-music/echo/compare/v2.7.0...v2.7.1) (2020-07-30)
+
+### Bug Fixes
+
+-   **crud-gateway:** fix converting functions ([e8fb557](https://github.com/ai-music/echo/commit/e8fb557f887e10886ee2ba19425584281944ed23))
+
 # [2.7.0](https://github.com/ai-music/echo/compare/v2.6.0...v2.7.0) (2020-07-28)
 
 ### Features
