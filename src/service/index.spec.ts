@@ -58,7 +58,7 @@ describe('Service', () => {
         expect(() => service.getCollection(TestCollection.name)).toThrow('Connection is not created yet')
     })
 
-    it(`Should retrieve a register collection`, async () => {
+    it.only(`Should retrieve a register collection`, async () => {
         const service = MongoDBService.factory('test/connection', 'appName')
         service.registerCollection(TestCollection)
         await service.connect()

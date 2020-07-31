@@ -13,6 +13,7 @@ export class MongoClient {
         return {
             createCollection: (): Promise<boolean> => Promise.resolve(true),
             command: (): Promise<boolean> => Promise.resolve(true),
+            collections: (): Promise<any[]> => Promise.resolve([]),
             collection: (): object => ({
                 createIndex: (): Promise<boolean> => Promise.resolve(true),
                 insertOne: (document: any): Promise<any> => {

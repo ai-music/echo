@@ -41,6 +41,7 @@ export class MongoDBService {
     }
 
     protected async configureCollections(): Promise<void> {
+        const collections = await this.client.db().collections()
         for (const collectionBuilder of this.collectionsBuilder) {
             const [collectionName, CollectionClass] = collectionBuilder
             const config: ICollectionConfig = {
@@ -51,7 +52,9 @@ export class MongoDBService {
                 crudGateway: CollectionClass.crudGateway || defaultCrudGateway
             }
             const collection = new CollectionClass(config)
-            await collection.createCollection()
+            if (!collections.find((collection) => collection.collectionName === collectionName.toLowerCase())) {
+                await collection.createCollection()
+            }
             await collection.updateSchema()
             await Promise.all(collection.indexes.map((index: IIndex) => collection.createIndex(index.config)))
             this.collections[collectionName] = collection
