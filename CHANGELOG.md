@@ -1,3 +1,9 @@
+## [2.7.2](https://github.com/ai-music/echo/compare/v2.7.1...v2.7.2) (2020-07-31)
+
+### Bug Fixes
+
+-   **collection:** avoid create a duplicate collection ([435d6c4](https://github.com/ai-music/echo/commit/435d6c41862d21086dc7165559814584f4f6367e))
+
 ## [2.7.1](https://github.com/ai-music/echo/compare/v2.7.0...v2.7.1) (2020-07-30)
 
 ### Bug Fixes
