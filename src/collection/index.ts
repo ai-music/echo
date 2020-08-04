@@ -73,7 +73,7 @@ export abstract class AbstractCollection<T> implements ICollection<T> {
         this.crudGateway.delete.after(result)
     }
 
-    protected getCollection(): Collection {
+    public getCollection(): Collection {
         return this.client.db().collection(this.collectionName)
     }
 }
