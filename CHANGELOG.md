@@ -1,3 +1,9 @@
+## [2.7.3](https://github.com/ai-music/echo/compare/v2.7.2...v2.7.3) (2020-08-04)
+
+### Bug Fixes
+
+-   **collection:** expose getCollection to work directly with mongodb collection ([fb6d76d](https://github.com/ai-music/echo/commit/fb6d76d0b66afee7f35bc20a7eb3236151cc4e8e))
+
 ## [2.7.2](https://github.com/ai-music/echo/compare/v2.7.1...v2.7.2) (2020-07-31)
 
 ### Bug Fixes
