@@ -45,7 +45,7 @@ describe('CrudGateway', () => {
         expect(uuidCrudGateway.update.after(updateResult.document)).toHaveProperty('id')
         expect(uuidCrudGateway.delete.before(test)).toBe(test)
         expect(uuidCrudGateway.delete.after(test)).toBe(test)
-        expect(uuidCrudGateway.list.before(tests)).toBe(tests)
+        expect(uuidCrudGateway.list.before({ test: 'test', id: 'test' })).toHaveProperty('_id')
         expect(uuidCrudGateway.list.after(tests)[0]).toHaveProperty('id')
     })
 })

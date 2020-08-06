@@ -46,7 +46,7 @@ export const uuidCrudGateway: ICrudGateway = {
         after: <T>(document: T): T => document
     },
     list: {
-        before: (input: unknown): unknown => input,
+        before: <T>(filter: FilterQuery<T>): any => convertId(filter),
         after: <T>(documents: unknown[]): T[] => documents.map((document: T) => convert_Id(document))
     }
 }
