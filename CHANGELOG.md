@@ -1,3 +1,9 @@
+## [2.7.4](https://github.com/ai-music/echo/compare/v2.7.3...v2.7.4) (2020-08-06)
+
+### Bug Fixes
+
+-   **UUIDGateway:** Fix list before function ([6a9c7fb](https://github.com/ai-music/echo/commit/6a9c7fb1a153b2a7a8da35621b2ae97a3618b858))
+
 ## [2.7.3](https://github.com/ai-music/echo/compare/v2.7.2...v2.7.3) (2020-08-04)
 
 ### Bug Fixes
