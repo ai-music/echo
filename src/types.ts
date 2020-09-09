@@ -68,7 +68,7 @@ export interface ICollection<T> {
 
     findDocument(filter: FilterQuery<T>): Promise<T>
 
-    findDocuments(filter?: FilterQuery<T>): Promise<T[]>
+    findDocuments(findDocumentInput?: IFindDocumentsInput<T>): Promise<IDocumentsResponse<T>>
 }
 
 export interface ICollectionConfig {
@@ -116,3 +116,23 @@ export interface ICrudGatewayUpdateInput<T> {
 }
 
 export type CollectionConstructor<T = {}> = new (...args: any[]) => T
+
+export interface IDocumentsResponse<T> {
+    documents: T[]
+    total: number
+}
+
+export enum DEFAULT_PAGINATOR {
+    FROM = 0,
+    SIZE = 25
+}
+
+export interface IPaginator {
+    from: number
+    size: number
+}
+
+export interface IFindDocumentsInput<T> {
+    filter?: FilterQuery<T>
+    paginator?: IPaginator
+}

@@ -1,5 +1,14 @@
 import { Collection, FilterQuery, MongoClient } from 'mongodb'
-import { ICollection, ICollectionConfig, ICrudGateway, IIndex, IMongoSchema } from '../types'
+import {
+    DEFAULT_PAGINATOR,
+    ICollection,
+    ICollectionConfig,
+    ICrudGateway,
+    IDocumentsResponse,
+    IFindDocumentsInput,
+    IIndex,
+    IMongoSchema
+} from '../types'
 
 export abstract class AbstractCollection<T> implements ICollection<T> {
     public collectionName: string
@@ -58,14 +67,28 @@ export abstract class AbstractCollection<T> implements ICollection<T> {
         return this.crudGateway.read.after(result)
     }
 
-    public async findDocuments(filter?: FilterQuery<T>): Promise<T[]> {
-        const result = await this.getCollection().find(this.crudGateway.list.before(filter)).toArray()
-        return this.crudGateway.list.after(result)
-    }
+    public async findDocuments(findDocumentInput?: IFindDocumentsInput<T>): Promise<IDocumentsResponse<T>> {
+        if (!findDocumentInput) {
+            const result = await this.getCollection().find(this.crudGateway.list.before({})).toArray()
+            return {
+                documents: this.crudGateway.list.after(result),
+                total: result.length
+            }
+        }
 
-    public async deleteDocument(filter?: FilterQuery<T>): Promise<void> {
-        const result = await this.getCollection().deleteOne(this.crudGateway.delete.before(filter))
-        this.crudGateway.delete.after(result)
+        const { paginator, filter } = findDocumentInput
+        const skip = paginator?.from || DEFAULT_PAGINATOR.FROM
+        const limit = paginator?.size || DEFAULT_PAGINATOR.SIZE
+        const result = await this.getCollection()
+            .find(this.crudGateway.list.before(filter))
+            .skip(skip)
+            .limit(limit)
+            .toArray()
+
+        return {
+            documents: this.crudGateway.list.after(result),
+            total: await this.getTotal(filter)
+        }
     }
 
     public async deleteDocuments(filter?: FilterQuery<T>): Promise<void> {
@@ -75,5 +98,9 @@ export abstract class AbstractCollection<T> implements ICollection<T> {
 
     public getCollection(): Collection {
         return this.client.db().collection(this.collectionName)
+    }
+
+    public async getTotal(filter?: FilterQuery<T>): Promise<number> {
+        return await this.client.db().collection(this.collectionName).countDocuments(filter)
     }
 }

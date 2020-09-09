@@ -1,6 +1,6 @@
 import { AbstractCollection } from './index'
 import { MongoClient } from 'mongodb'
-import { ICollectionConfig, IIndex, IMongoSchema } from '../types'
+import { DEFAULT_PAGINATOR, ICollectionConfig, IIndex, IMongoSchema, IPaginator } from '../types'
 import { defaultCrudGateway } from './crud_gateway'
 
 describe('AbstractCollection', () => {
@@ -57,7 +57,7 @@ describe('AbstractCollection', () => {
         expect(createDocument).toBe('insertOne error')
     })
 
-    it(`Should return a a not valid response from mongo`, async () => {
+    it(`Should return a not valid response from mongo`, async () => {
         const t = { ...document, pleaseFailWeird: true }
         const createDocument = await testInstance.createDocument(t).catch((e) => e.message)
         expect(createDocument).toBe('Create document error - response from MongoDB is not valid')
@@ -75,7 +75,7 @@ describe('AbstractCollection', () => {
         expect(updateDocument).toBe('findOneAndUpdate error')
     })
 
-    it(`Should return a a not valid response from mongo`, async () => {
+    it(`Should return a not valid response from mongo`, async () => {
         const t = { ...document, pleaseFailWeird: true }
         const updateDocument = await testInstance.updateDocument({ _id: t.id }, t).catch((e) => e.message)
         expect(updateDocument).toBe('Update document error - response from MongoDB is not valid')
@@ -95,16 +95,24 @@ describe('AbstractCollection', () => {
 
     it(`Should Find a collection of documents`, async () => {
         const t = { isValid: true }
-        const list = await testInstance.findDocuments(t)
-        expect(Array.isArray(list)).toBe(true)
-        expect(list.length).toBe(2)
+        const paginator: IPaginator = { from: DEFAULT_PAGINATOR.FROM, size: DEFAULT_PAGINATOR.SIZE }
+        const list = await testInstance.findDocuments({ filter: t, paginator })
+        expect(Array.isArray(list.documents)).toBe(true)
+        expect(list.total).toBe(2)
+    })
+
+    it(`Should Find a collection of documents`, async () => {
+        const list = await testInstance.findDocuments()
+        expect(Array.isArray(list.documents)).toBe(true)
+        expect(list.total).toBe(2)
     })
 
     it(`Should return an empty collection`, async () => {
         const t = { isValid: false }
-        const list = await testInstance.findDocuments(t)
-        expect(Array.isArray(list)).toBe(true)
-        expect(list.length).toBe(0)
+        const paginator: IPaginator = { from: DEFAULT_PAGINATOR.FROM, size: DEFAULT_PAGINATOR.SIZE }
+        const list = await testInstance.findDocuments({ filter: t, paginator })
+        expect(Array.isArray(list.documents)).toBe(true)
+        expect(list.total).toBe(0)
     })
 
     it('Should delete many documents', async () => {

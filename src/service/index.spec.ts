@@ -10,6 +10,10 @@ class TestCollection extends AbstractCollection<any> {
     @IndexUnique()
     protected email: string
 }
+// In order to cover the indexes and the defaultCrudGateway
+class TestCollection2 extends AbstractCollection<any> {
+    protected email: string
+}
 
 describe('Service', () => {
     it(`Should have factory`, async () => {
@@ -58,9 +62,10 @@ describe('Service', () => {
         expect(() => service.getCollection(TestCollection.name)).toThrow('Connection is not created yet')
     })
 
-    it.only(`Should retrieve a register collection`, async () => {
+    it(`Should retrieve a register collection`, async () => {
         const service = MongoDBService.factory('test/connection', 'appName')
         service.registerCollection(TestCollection)
+        service.registerCollection(TestCollection2)
         await service.connect()
         const collection = service.getCollection(TestCollection.name)
         expect(collection instanceof TestCollection).toBe(true)
