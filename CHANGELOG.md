@@ -1,3 +1,9 @@
+# [2.8.0](https://github.com/ai-music/echo/compare/v2.7.4...v2.8.0) (2020-09-09)
+
+### Features
+
+-   **Paginator:** add paginator to the collection ([363b2a6](https://github.com/ai-music/echo/commit/363b2a64518020c692a702a95f6775eb65236de1))
+
 ## [2.7.4](https://github.com/ai-music/echo/compare/v2.7.3...v2.7.4) (2020-08-06)
 
 ### Bug Fixes
