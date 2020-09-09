@@ -26,9 +26,20 @@ export class MongoClient {
                     return Promise.resolve({ ops: [document] })
                 },
                 findOne: (query: any): Promise<any> => (query.id ? Promise.resolve(query) : Promise.resolve(false)),
-                find: (query: any): object => ({
-                    toArray: (): Promise<any> =>
-                        query.isValid ? Promise.resolve([{ id: 'doc1' }, { id: 'doc2' }]) : Promise.resolve([])
+                find: (query?: any): object => ({
+                    skip: (): object => ({
+                        limit: (): object => ({
+                            toArray: (): Promise<any> => {
+                                if (query) {
+                                    return query.isValid
+                                        ? Promise.resolve([{ id: 'doc1' }, { id: 'doc2' }])
+                                        : Promise.resolve([])
+                                }
+                                return Promise.resolve([{ id: 'doc1' }, { id: 'doc2' }])
+                            }
+                        })
+                    }),
+                    toArray: (): Promise<any> => Promise.resolve([{ id: 'doc1' }, { id: 'doc2' }])
                 }),
                 findOneAndUpdate: (query: any, document: any): Promise<any> => {
                     if (document.$set?.pleaseFail) {
@@ -40,7 +51,8 @@ export class MongoClient {
                     }
                     return query._id ? Promise.resolve({ value: document.$set }) : Promise.resolve(false)
                 },
-                deleteMany: (query: any): Promise<any> => Promise.resolve(query)
+                deleteMany: (query: any): Promise<any> => Promise.resolve(query),
+                countDocuments: (query: any): Promise<any> => (query.isValid ? Promise.resolve(2) : Promise.resolve(0))
             })
         }
     }

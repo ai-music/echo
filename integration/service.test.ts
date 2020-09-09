@@ -2,6 +2,7 @@ import { MongoDBService } from '../src/service'
 import { Cars } from './collections/cars'
 import { Users } from './collections/users'
 import { Dogs } from './collections/dogs'
+import { DEFAULT_PAGINATOR, IPaginator } from '../src'
 
 describe('Service', () => {
     let service: MongoDBService = null
@@ -28,7 +29,7 @@ describe('Service', () => {
         it(`Create a car`, async () => {
             const cars = service.getCollection<Cars>(Cars.name)
             const car = await cars.createDocument({
-                model: 123,
+                model: 1,
                 name: '500 FIAT',
                 productionDate: new Date()
             })
@@ -44,21 +45,49 @@ describe('Service', () => {
         it('Should update the car', async () => {
             const cars = service.getCollection<Cars>(Cars.name)
             const car = await cars.createDocument({
-                model: 123,
+                model: 2,
                 name: '500 FIAT',
                 productionDate: new Date()
             })
-            const updatedCar = await cars.updateDocument({ _id: car._id }, { ...car, model: 234 })
-            expect(updatedCar.model).toBe(234)
+            const updatedCar = await cars.updateDocument({ _id: car._id }, { ...car, model: 200 })
+            expect(updatedCar.model).toBe(200)
+        })
+
+        it('should list all the cars', async () => {
+            const cars = service.getCollection<Cars>(Cars.name)
+            await cars.createDocument({
+                model: 3,
+                name: '500 FIAT',
+                productionDate: new Date()
+            })
+            await cars.createDocument({
+                model: 4,
+                name: '500 FIAT',
+                productionDate: new Date()
+            })
+            await cars.createDocument({
+                model: 5,
+                name: '500 FIAT',
+                productionDate: new Date()
+            })
+            const paginator: IPaginator = { from: DEFAULT_PAGINATOR.FROM, size: 2 }
+            const allCars = await cars.findDocuments({ paginator })
+            expect(allCars.documents.length).toBe(2)
+            expect(allCars.total).toBe(5)
+            const paginator2: IPaginator = { from: DEFAULT_PAGINATOR.FROM } as IPaginator
+            const allCars2 = await cars.findDocuments({ paginator: paginator2 })
+            expect(allCars2.documents.length).toBe(5)
+            expect(allCars2.total).toBe(5)
         })
 
         it(`Should delete all cars`, async () => {
             const cars = service.getCollection<Cars>(Cars.name)
-            const allCars = await cars.findDocuments()
-            const ids = allCars.map((car) => car._id)
+            const paginator: IPaginator = { from: DEFAULT_PAGINATOR.FROM, size: DEFAULT_PAGINATOR.SIZE }
+            const allCars = await cars.findDocuments({ paginator })
+            const ids = allCars.documents.map((car) => car._id)
             await cars.deleteDocuments({ _id: { $in: ids } })
-            const allCarsAfterDelete = await cars.findDocuments()
-            expect(allCarsAfterDelete).toHaveLength(0)
+            const allCarsAfterDelete = await cars.findDocuments({ paginator })
+            expect(allCarsAfterDelete.total).toBe(0)
         })
     })
 
@@ -109,11 +138,26 @@ describe('Service', () => {
             expect(pluto.name).toBe('pluto')
         })
 
-        it(`Should find all the dogs (id)`, async () => {
+        it(`Should find all the dogs with paginator`, async () => {
+            const dogs = service.getCollection<Dogs>(Dogs.name)
+            const paginator: IPaginator = { from: DEFAULT_PAGINATOR.FROM, size: DEFAULT_PAGINATOR.SIZE }
+            const allDogs = await dogs.findDocuments({ paginator })
+            expect(Array.isArray(allDogs.documents)).toBe(true)
+            expect(allDogs.documents[0]).toHaveProperty('id')
+        })
+
+        it(`Should find all the dogs without any findDocumentsInput`, async () => {
             const dogs = service.getCollection<Dogs>(Dogs.name)
             const allDogs = await dogs.findDocuments()
-            expect(Array.isArray(allDogs)).toBe(true)
-            expect(allDogs[0]).toHaveProperty('id')
+            expect(Array.isArray(allDogs.documents)).toBe(true)
+            expect(allDogs.documents[0]).toHaveProperty('id')
+        })
+
+        it(`Should find all the dogs without paginator`, async () => {
+            const dogs = service.getCollection<Dogs>(Dogs.name)
+            const allDogs = await dogs.findDocuments({ filter: {} })
+            expect(Array.isArray(allDogs.documents)).toBe(true)
+            expect(allDogs.total).toBe(2)
         })
     })
 })
