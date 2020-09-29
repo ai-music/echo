@@ -1,3 +1,13 @@
+## [2.8.1](https://github.com/ai-music/echo/compare/v2.8.0...v2.8.1) (2020-09-29)
+
+
+### Bug Fixes
+
+* **decorator:** update field decorator type ([33fc004](https://github.com/ai-music/echo/commit/33fc0048404be77b582faaf8131c441aa57c02ab))
+* **decorator:** update the field decorator ([514b881](https://github.com/ai-music/echo/commit/514b88129314f7293559d5d3559d5533e26f636a))
+* **Decorator:** change the boolean type to bool ([b126696](https://github.com/ai-music/echo/commit/b126696e8ab66698470acbbfe9afb2183ccd2040))
+* **paginator:** update the shape of the paginator ([aff0d97](https://github.com/ai-music/echo/commit/aff0d97d5f082119ebdea2bc6d77f4e2e5f8158a))
+
 # [2.8.0](https://github.com/ai-music/echo/compare/v2.7.4...v2.8.0) (2020-09-09)
 
 ### Features
