@@ -69,10 +69,10 @@ export function IndexUnique(order = 1) {
 
 export function resolveFieldType(target: ICollection<unknown>, propertyKey: string): TMongoTypes {
     let { name } = Reflect.getMetadata('design:type', target, propertyKey)
-    name = name === 'Boolean' ? 'bool' : name
     if (!name) {
         throw TypeError(`Invalid type provided for ${target.toString()} - ${propertyKey}`)
     }
+    name = name === 'Boolean' ? 'bool' : name
     return name.toLowerCase()
 }
 
