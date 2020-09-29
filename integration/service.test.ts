@@ -2,7 +2,7 @@ import { MongoDBService } from '../src/service'
 import { Cars } from './collections/cars'
 import { Users } from './collections/users'
 import { Dogs } from './collections/dogs'
-import { DEFAULT_PAGINATOR, IPaginator } from '../src'
+import { DEFAULT_PAGINATOR, IPaginatorInput } from '../src'
 
 describe('Service', () => {
     let service: MongoDBService = null
@@ -70,24 +70,24 @@ describe('Service', () => {
                 name: '500 FIAT',
                 productionDate: new Date()
             })
-            const paginator: IPaginator = { from: DEFAULT_PAGINATOR.FROM, size: 2 }
+            const paginator: IPaginatorInput = { from: DEFAULT_PAGINATOR.FROM, size: 2 }
             const allCars = await cars.findDocuments({ paginator })
-            expect(allCars.documents.length).toBe(2)
-            expect(allCars.total).toBe(5)
-            const paginator2: IPaginator = { from: DEFAULT_PAGINATOR.FROM } as IPaginator
+            expect(allCars.data.length).toBe(2)
+            expect(allCars.paginator.total).toBe(2)
+            const paginator2: Partial<IPaginatorInput> = { from: DEFAULT_PAGINATOR.FROM }
             const allCars2 = await cars.findDocuments({ paginator: paginator2 })
-            expect(allCars2.documents.length).toBe(5)
-            expect(allCars2.total).toBe(5)
+            expect(allCars2.data.length).toBe(5)
+            expect(allCars2.paginator.total).toBe(5)
         })
 
         it(`Should delete all cars`, async () => {
             const cars = service.getCollection<Cars>(Cars.name)
-            const paginator: IPaginator = { from: DEFAULT_PAGINATOR.FROM, size: DEFAULT_PAGINATOR.SIZE }
+            const paginator: IPaginatorInput = { from: DEFAULT_PAGINATOR.FROM, size: DEFAULT_PAGINATOR.SIZE }
             const allCars = await cars.findDocuments({ paginator })
-            const ids = allCars.documents.map((car) => car._id)
+            const ids = allCars.data.map((car) => car._id)
             await cars.deleteDocuments({ _id: { $in: ids } })
             const allCarsAfterDelete = await cars.findDocuments({ paginator })
-            expect(allCarsAfterDelete.total).toBe(0)
+            expect(allCarsAfterDelete.paginator.total).toBe(0)
         })
     })
 
@@ -140,24 +140,24 @@ describe('Service', () => {
 
         it(`Should find all the dogs with paginator`, async () => {
             const dogs = service.getCollection<Dogs>(Dogs.name)
-            const paginator: IPaginator = { from: DEFAULT_PAGINATOR.FROM, size: DEFAULT_PAGINATOR.SIZE }
+            const paginator: IPaginatorInput = { from: DEFAULT_PAGINATOR.FROM, size: DEFAULT_PAGINATOR.SIZE }
             const allDogs = await dogs.findDocuments({ paginator })
-            expect(Array.isArray(allDogs.documents)).toBe(true)
-            expect(allDogs.documents[0]).toHaveProperty('id')
+            expect(Array.isArray(allDogs.data)).toBe(true)
+            expect(allDogs.data[0]).toHaveProperty('id')
         })
 
         it(`Should find all the dogs without any findDocumentsInput`, async () => {
             const dogs = service.getCollection<Dogs>(Dogs.name)
             const allDogs = await dogs.findDocuments()
-            expect(Array.isArray(allDogs.documents)).toBe(true)
-            expect(allDogs.documents[0]).toHaveProperty('id')
+            expect(Array.isArray(allDogs.data)).toBe(true)
+            expect(allDogs.data[0]).toHaveProperty('id')
         })
 
         it(`Should find all the dogs without paginator`, async () => {
             const dogs = service.getCollection<Dogs>(Dogs.name)
-            const allDogs = await dogs.findDocuments({ filter: {} })
-            expect(Array.isArray(allDogs.documents)).toBe(true)
-            expect(allDogs.total).toBe(2)
+            const allDogs = await dogs.findDocuments({ filters: {} })
+            expect(Array.isArray(allDogs.data)).toBe(true)
+            expect(allDogs.paginator.total).toBe(2)
         })
     })
 })
