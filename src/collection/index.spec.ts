@@ -1,6 +1,6 @@
 import { AbstractCollection } from './index'
 import { MongoClient } from 'mongodb'
-import { DEFAULT_PAGINATOR, ICollectionConfig, IIndex, IMongoSchema, IPaginator } from '../types'
+import { DEFAULT_PAGINATOR, ICollectionConfig, IIndex, IMongoSchema, IPaginatorInput } from '../types'
 import { defaultCrudGateway } from './crud_gateway'
 
 describe('AbstractCollection', () => {
@@ -95,24 +95,24 @@ describe('AbstractCollection', () => {
 
     it(`Should Find a collection of documents`, async () => {
         const t = { isValid: true }
-        const paginator: IPaginator = { from: DEFAULT_PAGINATOR.FROM, size: DEFAULT_PAGINATOR.SIZE }
-        const list = await testInstance.findDocuments({ filter: t, paginator })
-        expect(Array.isArray(list.documents)).toBe(true)
-        expect(list.total).toBe(2)
+        const paginator: IPaginatorInput = { from: DEFAULT_PAGINATOR.FROM, size: DEFAULT_PAGINATOR.SIZE }
+        const list = await testInstance.findDocuments({ filters: t, paginator })
+        expect(Array.isArray(list.data)).toBe(true)
+        expect(list.paginator.total).toBe(2)
     })
 
     it(`Should Find a collection of documents`, async () => {
         const list = await testInstance.findDocuments()
-        expect(Array.isArray(list.documents)).toBe(true)
-        expect(list.total).toBe(2)
+        expect(Array.isArray(list.data)).toBe(true)
+        expect(list.paginator.total).toBe(2)
     })
 
     it(`Should return an empty collection`, async () => {
         const t = { isValid: false }
-        const paginator: IPaginator = { from: DEFAULT_PAGINATOR.FROM, size: DEFAULT_PAGINATOR.SIZE }
-        const list = await testInstance.findDocuments({ filter: t, paginator })
-        expect(Array.isArray(list.documents)).toBe(true)
-        expect(list.total).toBe(0)
+        const paginator: IPaginatorInput = { from: DEFAULT_PAGINATOR.FROM, size: DEFAULT_PAGINATOR.SIZE }
+        const list = await testInstance.findDocuments({ filters: t, paginator })
+        expect(Array.isArray(list.data)).toBe(true)
+        expect(list.paginator.total).toBe(0)
     })
 
     it('Should delete many documents', async () => {

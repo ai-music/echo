@@ -71,23 +71,30 @@ export abstract class AbstractCollection<T> implements ICollection<T> {
         if (!findDocumentInput) {
             const result = await this.getCollection().find(this.crudGateway.list.before({})).toArray()
             return {
-                documents: this.crudGateway.list.after(result),
-                total: result.length
+                data: this.crudGateway.list.after(result),
+                paginator: {
+                    total: result.length,
+                    from: DEFAULT_PAGINATOR.FROM,
+                    size: DEFAULT_PAGINATOR.SIZE
+                }
             }
         }
 
-        const { paginator, filter } = findDocumentInput
+        const { paginator, filters } = findDocumentInput
         const skip = paginator?.from || DEFAULT_PAGINATOR.FROM
         const limit = paginator?.size || DEFAULT_PAGINATOR.SIZE
         const result = await this.getCollection()
-            .find(this.crudGateway.list.before(filter))
+            .find(this.crudGateway.list.before(filters))
             .skip(skip)
             .limit(limit)
             .toArray()
-
         return {
-            documents: this.crudGateway.list.after(result),
-            total: await this.getTotal(filter)
+            data: this.crudGateway.list.after(result),
+            paginator: {
+                total: result.length,
+                from: skip,
+                size: limit
+            }
         }
     }
 
@@ -98,9 +105,5 @@ export abstract class AbstractCollection<T> implements ICollection<T> {
 
     public getCollection(): Collection {
         return this.client.db().collection(this.collectionName)
-    }
-
-    public async getTotal(filter?: FilterQuery<T>): Promise<number> {
-        return await this.client.db().collection(this.collectionName).countDocuments(filter)
     }
 }

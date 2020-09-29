@@ -118,8 +118,8 @@ export interface ICrudGatewayUpdateInput<T> {
 export type CollectionConstructor<T = {}> = new (...args: any[]) => T
 
 export interface IDocumentsResponse<T> {
-    documents: T[]
-    total: number
+    data: T[]
+    paginator: Partial<IPaginatorOutput>
 }
 
 export enum DEFAULT_PAGINATOR {
@@ -127,12 +127,16 @@ export enum DEFAULT_PAGINATOR {
     SIZE = 25
 }
 
-export interface IPaginator {
+export interface IPaginatorInput {
     from: number
     size: number
 }
 
+export interface IPaginatorOutput extends IPaginatorInput {
+    total: number
+}
+
 export interface IFindDocumentsInput<T> {
-    filter?: FilterQuery<T>
-    paginator?: IPaginator
+    filters?: FilterQuery<T>
+    paginator?: Partial<IPaginatorInput>
 }
