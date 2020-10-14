@@ -1,13 +1,13 @@
 import { MongoDBService } from './index'
 import { MongoClient } from 'mongodb'
 import { AbstractCollection } from '../collection'
-import { Collection, IndexUnique } from '../decorators'
+import { Collection, Field } from '../decorators'
 
 jest.mock('mongodb')
 
 @Collection
 class TestCollection extends AbstractCollection<any> {
-    @IndexUnique()
+    @Field({ index: { unique: true } })
     protected email: string
 }
 // In order to cover the indexes and the defaultCrudGateway

@@ -1,4 +1,4 @@
-import { Collection, CrudGateway, Field, IndexUnique, resolveFieldType } from './index'
+import { Collection, CrudGateway, Field, resolveFieldType } from './index'
 import { defaultCrudGateway, uuidCrudGateway } from '../collection/crud_gateway'
 import { ICollection, ICollectionBuilder } from '../types'
 import { AbstractCollection } from '../collection'
@@ -29,7 +29,6 @@ describe('Decorators', () => {
         @Collection
         class Test extends AbstractCollection<any> {
             @Field()
-            @IndexUnique()
             protected test: string
         }
 
@@ -41,5 +40,18 @@ describe('Decorators', () => {
     it('[Field] Should fail autotype', () => {
         const test = {} as ICollection<any>
         expect(() => resolveFieldType(test, 'test')).toThrow('Invalid type provided for [object Object] - test')
+    })
+
+    it('[Field] Should be able to set an index to a field', () => {
+        @Collection
+        class Test extends AbstractCollection<any> {
+            @Field()
+            test: string
+
+            @Field({ index: { order: 1, unique: true } })
+            dexter: string
+        }
+
+        expect(Test).toHaveProperty('indexes')
     })
 })
