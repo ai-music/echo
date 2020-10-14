@@ -20,8 +20,14 @@ export type TMongoTypes =
     | 'minKey'
     | 'maxKey'
 
+export interface IIndexConfig {
+    unique?: boolean
+    order?: number
+}
+
 export interface IFieldConfig {
-    type: TMongoTypes
+    type?: TMongoTypes
+    index?: IIndexConfig
 }
 
 export interface IField {

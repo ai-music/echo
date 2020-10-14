@@ -1,4 +1,4 @@
-import { Collection, Field, IndexUnique, AbstractCollection } from '../../src'
+import { Collection, Field, AbstractCollection } from '../../src'
 
 interface IUser {
     firstName: string
@@ -15,8 +15,7 @@ export class Users extends AbstractCollection<IUser> {
     @Field()
     protected lastName: string
 
-    @Field()
-    @IndexUnique()
+    @Field({ index: { order: 1, unique: true } })
     protected email: string
 
     @Field()

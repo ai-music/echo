@@ -36,34 +36,24 @@ export function CrudGateway(crudGateway?: ICrudGateway) {
     }
 }
 
-export function Field(config?: IFieldConfig): any {
+export function Field(fieldConfig?: IFieldConfig): any {
     return function (target: ICollection<unknown>, propertyKey: string): void {
-        let type = config?.type
-        if (!config) {
+        const storageConfig = {
+            collection: target.constructor.name.toLowerCase(),
+            label: propertyKey
+        }
+        let type = fieldConfig?.type
+        if (!fieldConfig?.type) {
             type = resolveFieldType(target, propertyKey)
         }
-        Storage.updateStorage(
-            {
-                collection: target.constructor.name.toLowerCase(),
-                label: propertyKey,
-                config: { type }
-            },
-            MONGO_CONFIG_STORAGE_KEY.FIELDS
-        )
-    }
-}
-
-export function IndexUnique(order = 1) {
-    return function (target: ICollection<any>, propertyKey: string): void {
-        const mongoIndex = [{ [propertyKey]: order }, { unique: true }]
-        Storage.updateStorage(
-            {
-                collection: target.constructor.name.toLowerCase(),
-                label: propertyKey,
-                config: mongoIndex
-            },
-            MONGO_CONFIG_STORAGE_KEY.INDEXES
-        )
+        Storage.updateStorage({ ...storageConfig, config: { type } }, MONGO_CONFIG_STORAGE_KEY.FIELDS)
+        if (fieldConfig?.index) {
+            const config = [
+                { [propertyKey]: fieldConfig.index.order || 1 },
+                { unique: fieldConfig.index.unique || false }
+            ]
+            Storage.updateStorage({ ...storageConfig, config }, MONGO_CONFIG_STORAGE_KEY.INDEXES)
+        }
     }
 }
 
