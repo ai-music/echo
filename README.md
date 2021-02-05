@@ -46,10 +46,10 @@ interface UserDocument {
 }
 ```
 
-Create a collection class from AbstractCollection passing your document shape
+Create a collection class from AbstractCollection passing your document shape. To create a database index for a field, define the index parameters as an argument to the `@Field` decorator, as shown on the `email` field below.
 
 ```typescript
-import { AbstractCollection, Field, IndexUnique } from '@ai-music/echo'
+import { AbstractCollection, Field } from '@ai-music/echo'
 
 class Users extends AbstractCollection<UserDocument> {
     @Field()
@@ -58,8 +58,7 @@ class Users extends AbstractCollection<UserDocument> {
     @Field()
     protected lastName: string
 
-    @Field()
-    @IndexUnique()
+    @Field({ index: { order: 1, unique: true } })
     protected email: string
 
     @Field()
