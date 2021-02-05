@@ -37,7 +37,10 @@ export class MongoClient {
                                               { id: 'doc2', attribute: 'test', secondAttribute: 'secondAttribute' }
                                           ]
                                         : []
-                                    if (project?.fields && Object.keys(project.fields).length) {
+                                    if (
+                                        (project?.fields && Object.keys(project.fields).length) ||
+                                        Object.keys(project).length
+                                    ) {
                                         array = [
                                             { id: 'doc1', attribute: 'test' },
                                             { id: 'doc2', attribute: 'test' }
