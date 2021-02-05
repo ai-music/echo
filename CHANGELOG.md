@@ -1,3 +1,13 @@
+# [2.10.0](https://github.com/ai-music/echo/compare/v2.9.0...v2.10.0) (2021-02-05)
+
+### Bug Fixes
+
+-   **test:** update mock ([2b5479a](https://github.com/ai-music/echo/commit/2b5479ad18d77111b85935f359bfe36a85aae957))
+
+### Features
+
+-   **collection:** update find methods ([1f9ee97](https://github.com/ai-music/echo/commit/1f9ee97460522ec8934d3220c79e7c798e029be7))
+
 # [2.9.0](https://github.com/ai-music/echo/compare/v2.8.1...v2.9.0) (2020-10-14)
 
 ### Features
