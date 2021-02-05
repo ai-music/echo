@@ -1,9 +1,8 @@
-import { MongoDBService } from '../src/service'
 import { Cars } from './collections/cars'
 import { Users } from './collections/users'
 import { Dogs } from './collections/dogs'
 import { Spaceships, ISpaceships } from './collections/spaceships'
-import { DEFAULT_PAGINATOR, IPaginatorInput } from '../src'
+import { DEFAULT_PAGINATOR, IPaginatorInput, MongoDBService } from '../src'
 import { ObjectID } from 'mongodb'
 
 describe('Service', () => {
@@ -60,7 +59,7 @@ describe('Service', () => {
             expect(updatedCar.model).toBe(200)
         })
 
-        it('should list all the cars', async () => {
+        it('should list all the cars without paginator', async () => {
             await cars.createDocument({
                 model: 3,
                 name: '500 FIAT',
@@ -76,23 +75,94 @@ describe('Service', () => {
                 name: '500 FIAT',
                 productionDate: new Date()
             })
+
+            const allCars = await cars.findDocuments({})
+            expect(allCars.data.length).toBe(5)
+
+            const filteredCars = await cars.findDocuments({ filters: { model: 5 } })
+            expect(filteredCars.data.length).toBe(1)
+            expect(filteredCars.data[0].model).toBe(5)
+        })
+
+        it('should list all the cars with paginator', async () => {
+            await cars.createDocument({
+                model: 6,
+                name: '500 FIAT',
+                productionDate: new Date()
+            })
+            await cars.createDocument({
+                model: 7,
+                name: '600 FIAT',
+                productionDate: new Date()
+            })
+            await cars.createDocument({
+                model: 8,
+                name: '600 FIAT',
+                productionDate: new Date()
+            })
+
             const paginator: IPaginatorInput = { from: DEFAULT_PAGINATOR.FROM, size: 2 }
-            const allCars = await cars.findDocuments({ paginator })
+            const allCars = await cars.findPaginatedDocuments({ paginator })
             expect(allCars.data.length).toBe(2)
             expect(allCars.paginator.total).toBe(2)
+
             const paginator2: Partial<IPaginatorInput> = { from: DEFAULT_PAGINATOR.FROM }
-            const allCars2 = await cars.findDocuments({ paginator: paginator2 })
-            expect(allCars2.data.length).toBe(5)
-            expect(allCars2.paginator.total).toBe(5)
+            const filteredCars = await cars.findPaginatedDocuments({
+                filters: { name: '600 FIAT' },
+                paginator: paginator2
+            })
+            expect(filteredCars.data.length).toBe(2)
+            expect(filteredCars.paginator.total).toBe(2)
+            expect(filteredCars.paginator.size).toBe(25)
+        })
+
+        it('should list all the cars with only the required fields', async () => {
+            await cars.createDocument({
+                model: 9,
+                name: '500 FIAT',
+                productionDate: new Date()
+            })
+            await cars.createDocument({
+                model: 10,
+                name: '600 FIAT',
+                productionDate: new Date()
+            })
+            await cars.createDocument({
+                model: 11,
+                name: '600 FIAT',
+                productionDate: new Date()
+            })
+
+            const paginator: IPaginatorInput = { from: DEFAULT_PAGINATOR.FROM, size: 2 }
+            const allCars = await cars.findPaginatedDocuments({ paginator }, ['name', 'model'])
+            expect(allCars.data.length).toBe(2)
+            expect(allCars.paginator.total).toBe(2)
+            expect(allCars.data[0].name).toBeDefined()
+            expect(allCars.data[0].model).toBeDefined()
+            expect(allCars.data[0].productionDate).toBeUndefined()
+
+            const paginator2: Partial<IPaginatorInput> = { from: DEFAULT_PAGINATOR.FROM }
+            const filteredCars = await cars.findPaginatedDocuments(
+                {
+                    filters: { name: '600 FIAT' },
+                    paginator: paginator2
+                },
+                ['name', 'model']
+            )
+            expect(filteredCars.data.length).toBe(4)
+            expect(filteredCars.paginator.total).toBe(4)
+            expect(filteredCars.paginator.size).toBe(25)
+            expect(allCars.data[0].name).toBeDefined()
+            expect(allCars.data[0].model).toBeDefined()
+            expect(allCars.data[0].productionDate).toBeUndefined()
         })
 
         it(`Should delete all cars`, async () => {
-            const paginator: IPaginatorInput = { from: DEFAULT_PAGINATOR.FROM, size: DEFAULT_PAGINATOR.SIZE }
-            const allCars = await cars.findDocuments({ paginator })
+            const allCars = await cars.findDocuments({})
             const ids = allCars.data.map((car) => car._id)
             await cars.deleteDocuments({ _id: { $in: ids } })
-            const allCarsAfterDelete = await cars.findDocuments({ paginator })
-            expect(allCarsAfterDelete.paginator.total).toBe(0)
+            const allCarsAfterDelete = await cars.findDocuments()
+            expect(allCarsAfterDelete.data.length).toBe(0)
         })
     })
 
@@ -204,7 +274,7 @@ describe('Service', () => {
 
         it(`Should find all the dogs with paginator`, async () => {
             const paginator: IPaginatorInput = { from: DEFAULT_PAGINATOR.FROM, size: DEFAULT_PAGINATOR.SIZE }
-            const allDogs = await dogs.findDocuments({ paginator })
+            const allDogs = await dogs.findPaginatedDocuments({ paginator })
             expect(Array.isArray(allDogs.data)).toBe(true)
             expect(allDogs.data[0]).toHaveProperty('id')
         })
@@ -218,7 +288,7 @@ describe('Service', () => {
         it(`Should find all the dogs without paginator`, async () => {
             const allDogs = await dogs.findDocuments({ filters: {} })
             expect(Array.isArray(allDogs.data)).toBe(true)
-            expect(allDogs.paginator.total).toBe(2)
+            expect(allDogs.data.length).toBe(2)
         })
     })
 })

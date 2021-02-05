@@ -11,7 +11,8 @@ describe('AbstractCollection', () => {
     let testInstance: AbstractCollection<any>
     const document = {
         id: '1234-1234-1234',
-        attribute: 'test'
+        attribute: 'test',
+        secondAttribute: 'secondAttribute'
     }
 
     beforeAll(() => {
@@ -95,24 +96,53 @@ describe('AbstractCollection', () => {
 
     it(`Should Find a collection of documents`, async () => {
         const t = { isValid: true }
-        const paginator: IPaginatorInput = { from: DEFAULT_PAGINATOR.FROM, size: DEFAULT_PAGINATOR.SIZE }
-        const list = await testInstance.findDocuments({ filters: t, paginator })
+        const list = await testInstance.findDocuments({ filters: t })
         expect(Array.isArray(list.data)).toBe(true)
-        expect(list.paginator.total).toBe(2)
     })
 
-    it(`Should Find a collection of documents`, async () => {
-        const list = await testInstance.findDocuments()
+    it(`Should Find a collection of paginated documents passing the paginator input`, async () => {
+        const t = { isValid: true }
+        const paginator: IPaginatorInput = { from: DEFAULT_PAGINATOR.FROM, size: DEFAULT_PAGINATOR.SIZE }
+        const list = await testInstance.findPaginatedDocuments({ filters: t, paginator })
         expect(Array.isArray(list.data)).toBe(true)
         expect(list.paginator.total).toBe(2)
+        expect(list.paginator.from).toBe(paginator.from)
+        expect(list.paginator.size).toBe(paginator.size)
+    })
+
+    it(`Should Find a collection of paginated documents without the paginator input`, async () => {
+        const t = { isValid: true }
+        const list = await testInstance.findPaginatedDocuments({ filters: t })
+        expect(Array.isArray(list.data)).toBe(true)
+        expect(list.paginator.total).toBe(2)
+        expect(list.paginator.total).toBe(2)
+        expect(list.paginator.from).toBe(DEFAULT_PAGINATOR.FROM)
+        expect(list.paginator.size).toBe(DEFAULT_PAGINATOR.SIZE)
+    })
+
+    it('Should return a collection with only the required fields', async () => {
+        const t = { isValid: true }
+        const p = ['attribute']
+        const list = await testInstance.findPaginatedDocuments({ filters: t }, p)
+        expect(Array.isArray(list.data)).toBe(true)
+        expect(list.data[0].id).toBe('doc1')
+        expect(list.data[0].attribute).toBe('test')
+        expect(list.data[0].secondAttribute).toBeUndefined()
+    })
+
+    it('Should return a collection with all the fields', async () => {
+        const t = { isValid: true }
+        const list = await testInstance.findPaginatedDocuments({ filters: t })
+        expect(Array.isArray(list.data)).toBe(true)
+        expect(list.data[0].id).toBe('doc1')
+        expect(list.data[0].attribute).toBe('test')
+        expect(list.data[0].secondAttribute).toBe('secondAttribute')
     })
 
     it(`Should return an empty collection`, async () => {
         const t = { isValid: false }
-        const paginator: IPaginatorInput = { from: DEFAULT_PAGINATOR.FROM, size: DEFAULT_PAGINATOR.SIZE }
-        const list = await testInstance.findDocuments({ filters: t, paginator })
+        const list = await testInstance.findDocuments({ filters: t })
         expect(Array.isArray(list.data)).toBe(true)
-        expect(list.paginator.total).toBe(0)
     })
 
     it('Should delete many documents', async () => {
