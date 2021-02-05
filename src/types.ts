@@ -72,9 +72,17 @@ export interface ICollection<T> {
 
     createDocument(document: T): Promise<T>
 
-    findDocument(filter: FilterQuery<T>): Promise<T>
+    findDocument(filter: FilterQuery<T>, fieldsToPopulate?: string[]): Promise<T>
 
-    findDocuments(findDocumentInput?: IFindDocumentsInput<T>): Promise<IDocumentsResponse<T>>
+    findDocuments(
+        findDocumentInput?: IFindDocumentsInput<T>,
+        fieldsToPopulate?: string[]
+    ): Promise<IDocumentsResponse<T>>
+
+    findPaginatedDocuments(
+        findPaginatedDocumentInput?: IFindPaginatedDocuments<T>,
+        fieldsToPopulate?: string[]
+    ): Promise<IPaginatedDocumentsResponse<T>>
 }
 
 export interface ICollectionConfig {
@@ -125,6 +133,9 @@ export type CollectionConstructor<T = {}> = new (...args: any[]) => T
 
 export interface IDocumentsResponse<T> {
     data: T[]
+}
+
+export interface IPaginatedDocumentsResponse<T> extends IDocumentsResponse<T> {
     paginator: Partial<IPaginatorOutput>
 }
 
@@ -144,5 +155,8 @@ export interface IPaginatorOutput extends IPaginatorInput {
 
 export interface IFindDocumentsInput<T> {
     filters?: FilterQuery<T>
+}
+
+export interface IFindPaginatedDocuments<T> extends IFindDocumentsInput<T> {
     paginator?: Partial<IPaginatorInput>
 }

@@ -25,6 +25,7 @@ N.B.
 
 -   [Quick start](#quick-start)
 -   [MongoDBService](#MongoDBService)
+-   [Retrieve Document Methods](#retrieve-document-methods)
 -   [Collections and AbstractCollection](#collections-and-abstractcollection)
 
 ## Quick start
@@ -125,6 +126,80 @@ async function initMyService(): Promise<any> {
         console.log(error)
     }
 }
+```
+
+## Retrieve Document Methods
+
+-   `findDocument` can be used to retrieve a single document by specific filters.
+-   `findDocuments` can be used to retrieve an array of documents by specific filters.
+
+```typescript
+interface IFindDocumentsInput<T>  {
+	filters?: FilterQuery<T>
+}
+
+findDocument(filters?: FilterQuery<T>, fieldsToPopulate?: string[] ): Promise<T | null>
+
+findDocuments(filters?: IFindDocumentsInput<T>, fieldsToPopulate?: string[] ): Promise<IDocumentsResponse<T>>
+
+```
+
+Example :
+
+```typescript
+const usersCollection = service.getCollection<Users>(Users.name)
+
+// Create new document
+const userData: UserDocument = {
+    firstName: 'mario',
+    lastName: 'bros',
+    email: 'mario@bros.com',
+    createdAt: new Date()
+}
+await usersCollection.createDocument(userData)
+
+// Find document
+const user = await usersCollection.findDocument({ email: 'mario@bros.com' })
+// user => { firstName: 'mario', lastName: 'bros', id: '1234-1234-1234-1234', email: 'mario@bros.com', createdAt: '2021-02-05T14:42:44.758Z' }
+
+// Find documents
+const users = await usersCollection.findDocuments({ email: 'mario@bros.com' })
+// users => { data: [ { firstName: 'mario', lastName: 'bros', id: '1234-1234-1234-1234', email: 'mario@bros.com', createdAt: '2021-02-05T14:42:44.758Z' } ] }
+```
+
+You can also pass in a second argument, which is optional, that allows you to populate the model with the specified keys
+
+Example:
+
+```typescript
+const user = await usersCollection.findDocument({ email: 'mario@bros.com' }, ['firstName', 'lastName'])
+// user => { firstName: 'mario', lastName: 'bros', id: '1234-1234-1234-1234' }
+
+// Find documents
+const users = await usersCollection.findDocuments({ filters: { email: 'mario@bros.com' } }, ['firstName', 'lastName'])
+// users => { data: [ { firstName: 'mario', lastName: 'bros', id: '1234-1234-1234-1234' } ] }
+```
+
+-   `findPaginatedDocuments` this one can be use to retrieve an array document by specific filters and paginator.
+    Also in this method you can pass in a second argument, which is optional, that allows you to populate the models with the specified keys
+
+```typescript
+interface IFindPaginatedDocumentsInput<T> extends IFindDocumentsInput<T> {
+	paginator?: Partial<IPaginatorInput>
+}
+
+findPaginatedDocuments(filters?: IFindPaginatedDocumentsInput<T>, fieldsToPopulate?: string[] ): Promise<IPaginatedDocumentsResponse<T>>
+```
+
+Example:
+
+```typescript
+const users = await usersCollection.findPaginatedDocument(
+    { filters: { email: 'mario@bros.com' }, paginator: { from: 0, size: 2 } },
+    ['firstName', 'lastName']
+)
+
+// users => { data: [ { firstName: 'mario', lastName: 'bros', id: '1234-1234-1234-1234' } ], paginator: { total: 1, from: 0, size: 2 } }
 ```
 
 ## Collections and AbstractCollection

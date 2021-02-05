@@ -27,18 +27,29 @@ export class MongoClient {
                 },
                 findOne: (query: any): Promise<any> => (query.id ? Promise.resolve(query) : Promise.resolve(false)),
                 find: (query?: any): object => ({
-                    skip: (): object => ({
-                        limit: (): object => ({
-                            toArray: (): Promise<any> => {
-                                if (query) {
-                                    return query.isValid
-                                        ? Promise.resolve([{ id: 'doc1' }, { id: 'doc2' }])
-                                        : Promise.resolve([])
+                    project: (project?: { fields: any }): object => ({
+                        skip: (): object => ({
+                            limit: (): object => ({
+                                toArray: (): Promise<any> => {
+                                    let array: any[] = query?.isValid
+                                        ? [
+                                              { id: 'doc1', attribute: 'test', secondAttribute: 'secondAttribute' },
+                                              { id: 'doc2', attribute: 'test', secondAttribute: 'secondAttribute' }
+                                          ]
+                                        : []
+                                    if (project?.fields && Object.keys(project.fields).length) {
+                                        array = [
+                                            { id: 'doc1', attribute: 'test' },
+                                            { id: 'doc2', attribute: 'test' }
+                                        ]
+                                    }
+                                    return Promise.resolve(array)
                                 }
-                                return Promise.resolve([{ id: 'doc1' }, { id: 'doc2' }])
-                            }
-                        })
+                            })
+                        }),
+                        toArray: (): Promise<any> => Promise.resolve([{ id: 'doc1' }, { id: 'doc2' }])
                     }),
+
                     toArray: (): Promise<any> => Promise.resolve([{ id: 'doc1' }, { id: 'doc2' }])
                 }),
                 findOneAndUpdate: (query: any, document: any): Promise<any> => {
