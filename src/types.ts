@@ -83,6 +83,8 @@ export interface ICollection<T> {
         findPaginatedDocumentInput?: IFindPaginatedDocuments<T>,
         fieldsToPopulate?: string[]
     ): Promise<IPaginatedDocumentsResponse<T>>
+
+    populateFields(fields: string[]): Record<string, number>
 }
 
 export interface ICollectionConfig {
@@ -103,30 +105,30 @@ export interface ICollectionBuilder {
 
 export interface ICrudGateway {
     create: {
-        before<T>(document: T): T
-        after<T>(document: T): T
+        before(document: Record<string, unknown>): any
+        after(document: Record<string, unknown>): any
     }
     read: {
-        before<T>(filters: FilterQuery<T>): T
-        after<T>(document: T): T
+        before(filters: FilterQuery<Record<string, unknown>>): any
+        after(document: Record<string, unknown>): any
     }
     update: {
-        before<T>(input: ICrudGatewayUpdateInput<T>): ICrudGatewayUpdateInput<T>
-        after<T>(document: T): T
+        before(input: ICrudGatewayUpdateInput): any
+        after(document: Record<string, unknown>): any
     }
     delete: {
-        before<T>(filters: FilterQuery<T>): T
-        after<T>(document: T): T
+        before(filters: FilterQuery<Record<string, unknown>>): any
+        after(document: unknown): any
     }
     list: {
-        before(input: unknown): unknown
-        after(documents: any[]): any[]
+        before(input: Record<string, unknown>): any
+        after(documents: Record<string, unknown>[]): any
     }
 }
 
-export interface ICrudGatewayUpdateInput<T> {
-    filters: FilterQuery<T>
-    document?: T
+export interface ICrudGatewayUpdateInput {
+    filters: FilterQuery<Record<string, unknown>>
+    document?: Record<string, unknown>
 }
 
 export type CollectionConstructor<T = {}> = new (...args: any[]) => T
