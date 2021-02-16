@@ -74,7 +74,7 @@ export abstract class AbstractCollection<T> implements ICollection<T> {
         findDocumentInput?: IFindDocumentsInput<T>,
         fieldsToPopulate?: string[]
     ): Promise<IDocumentsResponse<T>> {
-        const filters: Object = findDocumentInput?.filters || {}
+        const filters: Record<string, unknown> = findDocumentInput?.filters || {}
         const fields = fieldsToPopulate ? this.populateFields(fieldsToPopulate) : {}
         const result = await this.getCollection()
             .find(this.crudGateway.list.before(filters))
@@ -126,7 +126,7 @@ export abstract class AbstractCollection<T> implements ICollection<T> {
         return this.client.db().collection(this.collectionName)
     }
 
-    private populateFields(fields: string[]): Record<string, number> {
+    public populateFields(fields: string[]): Record<string, number> {
         let fieldsToReturn = {}
         fields.forEach((key) => {
             fieldsToReturn = {
