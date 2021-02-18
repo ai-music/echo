@@ -1,3 +1,9 @@
+## [2.10.1](https://github.com/ai-music/echo/compare/v2.10.0...v2.10.1) (2021-02-18)
+
+### Bug Fixes
+
+-   **creudgateway:** fix type ([c385ff0](https://github.com/ai-music/echo/commit/c385ff05bb7b7fad83e8aef5af61c6cf750da5aa))
+
 # [2.10.0](https://github.com/ai-music/echo/compare/v2.9.0...v2.10.0) (2021-02-05)
 
 ### Bug Fixes
