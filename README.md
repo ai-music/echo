@@ -77,7 +77,7 @@ service.registerCollection(Users)
 await service.connect()
 ```
 
-At this stage, you can start to use the your collection class in order to find/create/update/delete documents.
+At this stage, you can start to use your collection class in order to find/create/update/delete documents.
 
 ```typescript
 const usersCollection = service.getCollection<Users>(Users.name)
@@ -180,7 +180,7 @@ const users = await usersCollection.findDocuments({ filters: { email: 'mario@bro
 // users => { data: [ { firstName: 'mario', lastName: 'bros', id: '1234-1234-1234-1234' } ] }
 ```
 
--   `findPaginatedDocuments` this one can be use to retrieve an array document by specific filters and paginator.
+-   `findPaginatedDocuments` this one can be used to retrieve an array of documents by specific filters and paginator.
     Also in this method you can pass in a second argument, which is optional, that allows you to populate the models with the specified keys
 
 ```typescript

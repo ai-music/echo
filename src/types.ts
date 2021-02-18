@@ -121,7 +121,7 @@ export interface ICrudGateway {
         after(document: unknown): any
     }
     list: {
-        before(input: Record<string, unknown>): any
+        before(input: FilterQuery<Record<string, unknown>>): any
         after(documents: Record<string, unknown>[]): any
     }
 }

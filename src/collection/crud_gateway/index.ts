@@ -20,7 +20,7 @@ export const defaultCrudGateway: ICrudGateway = {
         after: (document: Record<string, unknown>): any => document
     },
     list: {
-        before: (input: Record<string, unknown>): any => input,
+        before: (input: FilterQuery<Record<string, unknown>>): any => input,
         after: (documents: Record<string, unknown>[]): any => documents
     }
 }
