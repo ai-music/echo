@@ -1,3 +1,9 @@
+## [2.10.2](https://github.com/ai-music/echo/compare/v2.10.1...v2.10.2) (2021-02-22)
+
+### Bug Fixes
+
+-   **crudgateway:** fix the type to any ([94723a6](https://github.com/ai-music/echo/commit/94723a67c0c77f1296fdf8be392f708147f394a0))
+
 ## [2.10.1](https://github.com/ai-music/echo/compare/v2.10.0...v2.10.1) (2021-02-18)
 
 ### Bug Fixes
