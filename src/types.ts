@@ -105,30 +105,30 @@ export interface ICollectionBuilder {
 
 export interface ICrudGateway {
     create: {
-        before(document: Record<string, unknown>): any
-        after(document: Record<string, unknown>): any
+        before(document: any): any
+        after(document: any): any
     }
     read: {
-        before(filters: FilterQuery<Record<string, unknown>>): any
-        after(document: Record<string, unknown>): any
+        before(filters: FilterQuery<any>): any
+        after(document: any): any
     }
     update: {
         before(input: ICrudGatewayUpdateInput): any
-        after(document: Record<string, unknown>): any
+        after(document: any): any
     }
     delete: {
-        before(filters: FilterQuery<Record<string, unknown>>): any
-        after(document: unknown): any
+        before(filters: FilterQuery<any>): any
+        after(document: any): any
     }
     list: {
-        before(input: FilterQuery<Record<string, unknown>>): any
-        after(documents: Record<string, unknown>[]): any
+        before(input: FilterQuery<any>): any
+        after(documents: any): any
     }
 }
 
 export interface ICrudGatewayUpdateInput {
-    filters: FilterQuery<Record<string, unknown>>
-    document?: Record<string, unknown>
+    filters: FilterQuery<any>
+    document?: any
 }
 
 export type CollectionConstructor<T = {}> = new (...args: any[]) => T

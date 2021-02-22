@@ -4,50 +4,50 @@ import { FilterQuery } from 'mongodb'
 
 export const defaultCrudGateway: ICrudGateway = {
     create: {
-        before: (document: Record<string, unknown>): any => document,
-        after: (document: Record<string, unknown>): any => document
+        before: (document: any): any => document,
+        after: (document: any): any => document
     },
     read: {
-        before: (input: FilterQuery<Record<string, unknown>>): any => input,
-        after: (document: Record<string, unknown>): any => document
+        before: (input: FilterQuery<any>): any => input,
+        after: (document: any): any => document
     },
     update: {
         before: (input: ICrudGatewayUpdateInput): any => input,
-        after: (document: Record<string, unknown>): any => document
+        after: (document: any): any => document
     },
     delete: {
-        before: (document: FilterQuery<Record<string, unknown>>): any => document,
-        after: (document: Record<string, unknown>): any => document
+        before: (document: FilterQuery<any>): any => document,
+        after: (document: any): any => document
     },
     list: {
-        before: (input: FilterQuery<Record<string, unknown>>): any => input,
-        after: (documents: Record<string, unknown>[]): any => documents
+        before: (input: FilterQuery<any>): any => input,
+        after: (documents: any): any => documents
     }
 }
 
 export const uuidCrudGateway: ICrudGateway = {
     create: {
-        before: (document: Record<string, unknown>): any => ({ _id: v4(), ...document }),
-        after: (document: Record<string, unknown>): any => convert_Id(document)
+        before: (document: any): any => ({ _id: v4(), ...document }),
+        after: (document: any): any => convert_Id(document)
     },
     read: {
-        before: (filter: FilterQuery<Record<string, unknown>>): any => convertId(filter),
-        after: (document: Record<string, unknown>): any => convert_Id(document)
+        before: (filter: FilterQuery<any>): any => convertId(filter),
+        after: (document: any): any => convert_Id(document)
     },
     update: {
         before: (input: ICrudGatewayUpdateInput): any => ({
             document: convertId(input.document),
             filters: convertId(input.filters)
         }),
-        after: (document: Record<string, unknown>): any => convert_Id(document)
+        after: (document: any): any => convert_Id(document)
     },
     delete: {
-        before: (document: FilterQuery<Record<string, unknown>>): any => document,
-        after: (document: Record<string, unknown>): any => document
+        before: (document: FilterQuery<any>): any => document,
+        after: (document: any): any => document
     },
     list: {
-        before: (filter: FilterQuery<Record<string, unknown>>): any => convertId(filter),
-        after: (documents: Record<string, unknown>[]): any => documents.map((document: unknown) => convert_Id(document))
+        before: (filter: FilterQuery<any>): any => convertId(filter),
+        after: (documents: any): any => documents.map((document: unknown) => convert_Id(document))
     }
 }
 
