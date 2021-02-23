@@ -1,3 +1,9 @@
+## [2.10.4](https://github.com/ai-music/echo/compare/v2.10.3...v2.10.4) (2021-02-23)
+
+### Bug Fixes
+
+-   update [@typescript-eslint](https://github.com/typescript-eslint) version ([aea84c8](https://github.com/ai-music/echo/commit/aea84c8a02a8ff6720c82057567e5f7ce8da653f))
+
 ## [2.10.3](https://github.com/ai-music/echo/compare/v2.10.2...v2.10.3) (2021-02-23)
 
 ### Bug Fixes
