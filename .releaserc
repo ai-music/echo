@@ -7,6 +7,12 @@
     '@semantic-release/npm',
     "@semantic-release/changelog", {
           "changelogFile": "CHANGELOG.md",
-    }
+    },
+    "releaseRules": [
+        {
+            'type': 'refactor',
+            'release': 'patch'
+        }
+      ],
   ]
 }
