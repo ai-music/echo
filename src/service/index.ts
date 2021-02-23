@@ -53,10 +53,7 @@ export class MongoDBService {
             }
             const collection = new CollectionClass(config)
             if (!collections.find((collection) => collection.collectionName === collectionName.toLowerCase())) {
-                //TODO @team DT-1790 - Fix create collection error -
-                await collection
-                    .createCollection()
-                    .catch((error) => console.log(`CreateCollection error: - ${error} -`))
+                await collection.createCollection()
             }
             await collection.updateSchema()
             await Promise.all(collection.indexes.map((index: IIndex) => collection.createIndex(index.config)))
