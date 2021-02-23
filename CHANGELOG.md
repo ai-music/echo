@@ -1,3 +1,9 @@
+## [2.10.3](https://github.com/ai-music/echo/compare/v2.10.2...v2.10.3) (2021-02-23)
+
+### Bug Fixes
+
+-   roll back semantic release config ([3375b3b](https://github.com/ai-music/echo/commit/3375b3b0562ef3db5756b65338a7dca370f5ad70))
+
 ## [2.10.2](https://github.com/ai-music/echo/compare/v2.10.1...v2.10.2) (2021-02-22)
 
 ### Bug Fixes
