@@ -9,3 +9,11 @@ dist
 .DS_Store
 coverage
 *.local.ts
+
+# yarn
+.yarn/*
+.yarn/cache
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
