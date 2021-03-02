@@ -7,7 +7,7 @@
 
 # Echo
 
-Echo is a tiny library that wraps MongoDB's basic configuration tasks and simplifies them; with native support for Typescript.
+Echo is a tiny library that wraps MongoDB's basic configuration tasks and simplifies them; with native support for TypeScript.
 
 **It is not (and does not aim to become) a complete ORM/ODM solution like [TypeORM](https://github.com/typeorm/typeorm) or [Mongoose](https://mongoosejs.com/).**
 
