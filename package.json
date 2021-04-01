@@ -1,6 +1,6 @@
 {
     "name": "@ai-music/echo",
-    "version": "2.13.0",
+    "version": "2.14.0",
     "description": "MongoDB configuration tool",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
