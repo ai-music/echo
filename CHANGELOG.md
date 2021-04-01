@@ -1,3 +1,9 @@
+# [2.12.0](https://github.com/ai-music/echo/compare/v2.11.0...v2.12.0) (2021-04-01)
+
+### Features
+
+-   **yarn:** restore yarn v1 ([ccb9d02](https://github.com/ai-music/echo/commit/ccb9d02edd93bb9571ab1f5083e3e45cd0dc5b24))
+
 # [2.11.0](https://github.com/ai-music/echo/compare/v2.10.4...v2.11.0) (2021-04-01)
 
 ### Features

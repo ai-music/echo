@@ -1,9 +1,6 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-
-#!/usr/bin/env bash
-
 set -e
 
 yarn tsc --skipLibCheck
