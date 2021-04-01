@@ -6,6 +6,7 @@ WORKDIR /service
 FROM base as builder
 WORKDIR /service
 COPY . .
+RUN ["yarn"]
 RUN ["yarn", "tsc" , "--skipLibCheck"]
 
 FROM base as tests
