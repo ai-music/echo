@@ -77,11 +77,11 @@ describe('Service', () => {
             })
 
             const allCars = await cars.findDocuments({})
-            expect(allCars.data.length).toBe(5)
+            expect(allCars.length).toBe(5)
 
             const filteredCars = await cars.findDocuments({ filters: { model: 5 } })
-            expect(filteredCars.data.length).toBe(1)
-            expect(filteredCars.data[0].model).toBe(5)
+            expect(filteredCars.length).toBe(1)
+            expect(filteredCars[0].model).toBe(5)
         })
 
         it('should list all the cars with paginator', async () => {
@@ -159,10 +159,10 @@ describe('Service', () => {
 
         it(`Should delete all cars`, async () => {
             const allCars = await cars.findDocuments({})
-            const ids = allCars.data.map((car) => car._id)
+            const ids = allCars.map((car) => car._id)
             await cars.deleteDocuments({ _id: { $in: ids } })
             const allCarsAfterDelete = await cars.findDocuments()
-            expect(allCarsAfterDelete.data.length).toBe(0)
+            expect(allCarsAfterDelete.length).toBe(0)
         })
     })
 
@@ -281,14 +281,14 @@ describe('Service', () => {
 
         it(`Should find all the dogs without any findDocumentsInput`, async () => {
             const allDogs = await dogs.findDocuments()
-            expect(Array.isArray(allDogs.data)).toBe(true)
-            expect(allDogs.data[0]).toHaveProperty('id')
+            expect(Array.isArray(allDogs)).toBe(true)
+            expect(allDogs[0]).toHaveProperty('id')
         })
 
         it(`Should find all the dogs without paginator`, async () => {
             const allDogs = await dogs.findDocuments({ filters: {} })
-            expect(Array.isArray(allDogs.data)).toBe(true)
-            expect(allDogs.data.length).toBe(2)
+            expect(Array.isArray(allDogs)).toBe(true)
+            expect(allDogs.length).toBe(2)
         })
     })
 })

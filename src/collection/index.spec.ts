@@ -97,7 +97,7 @@ describe('AbstractCollection', () => {
     it(`Should Find a collection of documents`, async () => {
         const t = { isValid: true }
         const list = await testInstance.findDocuments({ filters: t })
-        expect(Array.isArray(list.data)).toBe(true)
+        expect(Array.isArray(list)).toBe(true)
     })
 
     it(`Should Find a collection of paginated documents passing the paginator input`, async () => {
@@ -142,7 +142,7 @@ describe('AbstractCollection', () => {
     it(`Should return an empty collection`, async () => {
         const t = { isValid: false }
         const list = await testInstance.findDocuments({ filters: t })
-        expect(Array.isArray(list.data)).toBe(true)
+        expect(Array.isArray(list)).toBe(true)
     })
 
     it('Should delete many documents', async () => {

@@ -74,13 +74,10 @@ export interface ICollection<T> {
 
     findDocument(filter: FilterQuery<T>, fieldsToPopulate?: string[]): Promise<T>
 
-    findDocuments(
-        findDocumentInput?: IFindDocumentsInput<T>,
-        fieldsToPopulate?: string[]
-    ): Promise<IDocumentsResponse<T>>
+    findDocuments(input?: IFindDocumentsInput<T>, fieldsToPopulate?: string[]): Promise<T[]>
 
     findPaginatedDocuments(
-        findPaginatedDocumentInput?: IFindPaginatedDocuments<T>,
+        input?: IFindPaginatedDocuments<T>,
         fieldsToPopulate?: string[]
     ): Promise<IPaginatedDocumentsResponse<T>>
 
@@ -133,11 +130,8 @@ export interface ICrudGatewayUpdateInput {
 
 export type CollectionConstructor<T = {}> = new (...args: any[]) => T
 
-export interface IDocumentsResponse<T> {
+export interface IPaginatedDocumentsResponse<T> {
     data: T[]
-}
-
-export interface IPaginatedDocumentsResponse<T> extends IDocumentsResponse<T> {
     paginator: Partial<IPaginatorOutput>
 }
 
