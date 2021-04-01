@@ -4,7 +4,6 @@ import {
     ICollection,
     ICollectionConfig,
     ICrudGateway,
-    IDocumentsResponse,
     IFindDocumentsInput,
     IFindPaginatedDocuments,
     IIndex,
@@ -70,32 +69,27 @@ export abstract class AbstractCollection<T> implements ICollection<T> {
         return this.crudGateway.read.after(result)
     }
 
-    public async findDocuments(
-        findDocumentInput?: IFindDocumentsInput<T>,
-        fieldsToPopulate?: string[]
-    ): Promise<IDocumentsResponse<T>> {
-        const filters: Record<string, unknown> = findDocumentInput?.filters || {}
+    public async findDocuments(input?: IFindDocumentsInput<T>, fieldsToPopulate?: string[]): Promise<T[] | null> {
+        const filters: Record<string, unknown> = input?.filters || {}
         const fields = fieldsToPopulate ? this.populateFields(fieldsToPopulate) : {}
         const result = await this.getCollection()
             .find(this.crudGateway.list.before(filters))
             .project({ ...fields })
             .toArray()
-        return {
-            data: this.crudGateway.list.after(result)
-        }
+        return this.crudGateway.list.after(result)
     }
 
     public async findPaginatedDocuments(
-        findPaginatedDocumentInput?: IFindPaginatedDocuments<T>,
+        input?: IFindPaginatedDocuments<T>,
         fieldsToPopulate?: string[]
     ): Promise<IPaginatedDocumentsResponse<T>> {
-        const { paginator, filters } = findPaginatedDocumentInput
+        const { paginator, filters } = input
         const skip = paginator?.from || DEFAULT_PAGINATOR.FROM
         const limit = paginator?.size || DEFAULT_PAGINATOR.SIZE
         const inputFilters = filters || {}
         const fields = fieldsToPopulate ? this.populateFields(fieldsToPopulate) : {}
 
-        const result = findPaginatedDocumentInput
+        const result = input
             ? await this.getCollection()
                   .find(this.crudGateway.list.before(inputFilters))
                   .project({ ...fields })

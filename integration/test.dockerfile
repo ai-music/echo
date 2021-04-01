@@ -1,20 +1,22 @@
-FROM node:14 as Base
+FROM node:14 as base
 
-FROM Base as Development
+FROM base as development
 WORKDIR /service
 
-FROM Base as Builder
+FROM base as builder
 WORKDIR /service
 COPY . .
-RUN ["yarn", "--cwd", "/service", "install"]
-RUN ["yarn", "--cwd", "/service", "tsc" , "--skipLibCheck"]
+RUN yarn set version berry
+RUN yarn
+RUN cd /service
+RUN ["yarn", "tsc" , "--skipLibCheck"]
 
-FROM Base as Tests
+FROM base as tests
 WORKDIR /service
-COPY --from=Builder /service/integration ./integration
-COPY --from=Builder /service/src ./src
-COPY --from=Builder /service/package.json ./
-COPY --from=Builder /service/node_modules ./node_modules
-COPY --from=Builder /service/tsconfig.json ./
-COPY --from=Builder /service/jest_integration.json ./
+COPY --from=builder /service/integration ./integration
+COPY --from=builder /service/src ./src
+COPY --from=builder /service/package.json ./
+COPY --from=builder /service/node_modules ./node_modules
+COPY --from=builder /service/tsconfig.json ./
+COPY --from=builder /service/jest_integration.json ./
 ENTRYPOINT ["yarn", "--cwd", "/service", "integration"]
