@@ -6,9 +6,6 @@ WORKDIR /service
 FROM base as builder
 WORKDIR /service
 COPY . .
-RUN yarn set version berry
-RUN yarn
-RUN cd /service
 RUN ["yarn", "tsc" , "--skipLibCheck"]
 
 FROM base as tests
@@ -19,4 +16,4 @@ COPY --from=builder /service/package.json ./
 COPY --from=builder /service/node_modules ./node_modules
 COPY --from=builder /service/tsconfig.json ./
 COPY --from=builder /service/jest_integration.json ./
-ENTRYPOINT ["yarn", "--cwd", "/service", "integration"]
+ENTRYPOINT ["yarn", "integration"]
