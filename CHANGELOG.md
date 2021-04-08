@@ -1,3 +1,9 @@
+## [2.14.3](https://github.com/ai-music/echo/compare/v2.14.2...v2.14.3) (2021-04-08)
+
+### Bug Fixes
+
+-   bump version ([d5b39b7](https://github.com/ai-music/echo/commit/d5b39b7bbe40751ab46e7fedac924fc04b59d0e2))
+
 ## [2.14.1](https://github.com/ai-music/echo/compare/v2.14.0...v2.14.1) (2021-04-08)
 
 ### Bug Fixes
