@@ -1,3 +1,9 @@
+## [2.14.1](https://github.com/ai-music/echo/compare/v2.14.0...v2.14.1) (2021-04-08)
+
+### Bug Fixes
+
+-   **finddocuments:** update the total in the paginator ([0a02306](https://github.com/ai-music/echo/commit/0a0230684a429011746733d8da03c3146de2311a))
+
 # [2.14.0](https://github.com/ai-music/echo/compare/v2.13.0...v2.14.0) (2021-04-01)
 
 ### Features
