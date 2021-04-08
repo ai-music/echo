@@ -195,7 +195,7 @@ Example:
 
 ```typescript
 const users = await usersCollection.findPaginatedDocument(
-    { filters: { email: 'mario@bros.com' }, paginator: { from: 0, size: 2 } },
+    { filters: { email: 'mario@bros.com' }, paginator: { from: 0, size: 4 } },
     ['firstName', 'lastName']
 )
 
