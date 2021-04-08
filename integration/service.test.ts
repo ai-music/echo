@@ -104,7 +104,7 @@ describe('Service', () => {
             const paginator: IPaginatorInput = { from: DEFAULT_PAGINATOR.FROM, size: 2 }
             const allCars = await cars.findPaginatedDocuments({ paginator })
             expect(allCars.data.length).toBe(2)
-            expect(allCars.paginator.total).toBe(2)
+            expect(allCars.paginator.total).toBe(8)
 
             const paginator2: Partial<IPaginatorInput> = { from: DEFAULT_PAGINATOR.FROM }
             const filteredCars = await cars.findPaginatedDocuments({
@@ -136,7 +136,7 @@ describe('Service', () => {
             const paginator: IPaginatorInput = { from: DEFAULT_PAGINATOR.FROM, size: 2 }
             const allCars = await cars.findPaginatedDocuments({ paginator }, ['name', 'model'])
             expect(allCars.data.length).toBe(2)
-            expect(allCars.paginator.total).toBe(2)
+            expect(allCars.paginator.total).toBe(11)
             expect(allCars.data[0].name).toBeDefined()
             expect(allCars.data[0].model).toBeDefined()
             expect(allCars.data[0].productionDate).toBeUndefined()

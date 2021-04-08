@@ -115,7 +115,6 @@ describe('AbstractCollection', () => {
         const list = await testInstance.findPaginatedDocuments({ filters: t })
         expect(Array.isArray(list.data)).toBe(true)
         expect(list.paginator.total).toBe(2)
-        expect(list.paginator.total).toBe(2)
         expect(list.paginator.from).toBe(DEFAULT_PAGINATOR.FROM)
         expect(list.paginator.size).toBe(DEFAULT_PAGINATOR.SIZE)
     })

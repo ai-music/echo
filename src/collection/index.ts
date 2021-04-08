@@ -89,6 +89,8 @@ export abstract class AbstractCollection<T> implements ICollection<T> {
         const inputFilters = filters || {}
         const fields = fieldsToPopulate ? this.populateFields(fieldsToPopulate) : {}
 
+        const count = await this.getCollection().countDocuments(inputFilters)
+
         const result = input
             ? await this.getCollection()
                   .find(this.crudGateway.list.before(inputFilters))
@@ -104,7 +106,7 @@ export abstract class AbstractCollection<T> implements ICollection<T> {
         return {
             data: this.crudGateway.list.after(result),
             paginator: {
-                total: result.length,
+                total: count,
                 from: skip,
                 size: limit
             }
