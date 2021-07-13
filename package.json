@@ -42,7 +42,7 @@
         "husky": "^6.0.0"
     },
     "dependencies": {
-        "mongodb": "^3.6.4",
+        "mongodb": "^4.0.0",
         "reflect-metadata": "^0.1.13",
         "uuid": "^8.3.2"
     }
